@@ -8,6 +8,7 @@ namespace Ex04.Menus.Delegates
 {
     internal class MainMenu
     {
+        private const string k_Exit = "Exit";
         public const string k_Version = "Version: 22.3.4.8650";
         public MainMenu()
         {

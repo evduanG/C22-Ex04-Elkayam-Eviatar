@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 
 namespace Ex04.Menus.Delegates
 {
-    internal class MenuItem<TEnum> where TEnum : Enum
+    //internal class MenuItem<TEnum> where TEnum : Enum
+        //private TEnum m_EnunVal;
+    internal class MenuItem
     {
-        private const string k_Exit = "Exit";
         private const string k_Back = "Back";
         private const string k_LinedisplayFormt = "{0} ==> {1}";
-        private TEnum m_EnunVal;
-        //private static readonly Dictionary<string, MenuItem> k_MenuItems = new Dictionary<string, MenuItem>();
+        private byte m_Value;
+        private readonly Dictionary<Enum, MenuItem> r_MenuItems;
         private string m_Title;
 
         public string Title
@@ -24,17 +25,25 @@ namespace Ex04.Menus.Delegates
         {
             get
             {
-                //return !(m_SubmenusItems.Count > 0);
+                return !(r_MenuItems.Count > 0);
             }
         }
         
-        //public List<MenuItem> m_SubmenusItems;
         private readonly bool r_IsMainMenu;
 
-        public MenuItem(string i_Title, List<MenuItem> i_SubmenusItems)
+        public MenuItem(string i_Title, byte i_Value, bool i_IsMainMenu, Type i_EnumType,)
         {
             Title = i_Title;
-            //m_SubmenusItems = i_SubmenusItems;
+            r_IsMainMenu = i_IsMainMenu;
+            m_Value = i_Value; 
+            string[] names = Enum.GetNames(i_EnumType);
+            int[] values = (int[])Enum.GetValues(i_EnumType);
+
+            foreach (string name in names)
+            {
+                
+            }
+
         }
 
 
@@ -42,7 +51,7 @@ namespace Ex04.Menus.Delegates
         {
             //Enum.GetName(typeof(Days), value);
 
-            //return string.Format(k_LinedisplayFormt, (int)m_EnunVal, m_EnunVal);
+            return string.Format(k_LinedisplayFormt, m_Value, m_Title);
         }
     }
 }
