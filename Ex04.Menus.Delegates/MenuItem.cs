@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Ex04.Menus.Delegates
 {
-    public delegate void ChoiceInvoker(MenuItem i_MenuItem);
+    internal delegate void ChoiceInvoker(MenuItem i_MenuItem);
 
     internal class MenuItem
     {
@@ -67,16 +67,10 @@ namespace Ex04.Menus.Delegates
             m_Parent = i_Parent;
         }
 
-        public void Add()
-        {
-
-        }
         public string Show()
         {
             return string.Format(k_LineDisplayFormt, m_Value, m_Title);
         }
-
- 
 
         protected virtual void OnClicked()
         {
@@ -85,6 +79,24 @@ namespace Ex04.Menus.Delegates
             {
                 m_ChoiceInvoker.Invoke(this);
             }
+        }
+
+        internal static bool GetvaluesAndNamesFormEnum(Type i_EnumType, out string[] o_Name, out int[] o_values)
+        {
+            bool isSucceed = false;
+
+            if (i_EnumType.IsEnum)
+            {
+                o_Name = Enum.GetNames(i_EnumType);
+                o_values = (int[])Enum.GetValues(i_EnumType);
+            }
+            else
+            {
+                o_Name = null;
+                o_values = null;
+            }
+
+            return isSucceed;
         }
     }
 }

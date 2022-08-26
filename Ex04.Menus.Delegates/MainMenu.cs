@@ -13,21 +13,36 @@ namespace Ex04.Menus.Delegates
         private const string k_TitleDisplayFormt = "**{0}**";
         private const string k_LineSeparatorFormt = "--------------------------";
         private const string k_ChoiceQuestion = "Enter your requst ({0} to {1} or `0` to {2}";
+        private const string k_MainMenuTitle = "Deleates Main Menu";
 
         private readonly Dictionary<byte, MenuItem> r_MenuItems;
-
 
         public const string k_Version = "Version: 22.3.4.8650";
         public MainMenu(Enum i_Enum, MenuItem i_MenuItem)
             :base(i_MenuItem.Title, i_MenuItem.Value, i_MenuItem.Parent)
         {
-            string[] names = Enum.GetNames(i_Enum.GetType());
-            byte[] index = (byte[])Enum.GetValues(i_Enum.GetType());
+            bool isTypeEnum = GetvaluesAndNamesFormEnum(i_Enum.GetType(), out string[] o_Name, out int[] o_Values);
             r_MenuItems = new Dictionary<byte, MenuItem>();
-            for(int i = 0; i < names.Length; i++)
+            for(int i = 0; i < o_Name.Length; i++)
             {
-                r_MenuItems.Add(index[i], new MenuItem(names[i], index[i], this));
+                r_MenuItems.Add((byte)o_Values[i], new MenuItem(o_Name[i], (byte)o_Values[i], this));
             }
+        }
+
+        public MainMenu(Type i_Enum, string i_Title, byte i_Value, MenuItem i_Parent)
+                :base(i_Title, i_Value, i_Parent)
+            {
+                bool isTypeEnum = GetvaluesAndNamesFormEnum(i_Enum.GetType(), out string[] o_Name, out int[] o_Values);
+                r_MenuItems = new Dictionary<byte, MenuItem>();
+                for(int i = 0; i < o_Name.Length; i++)
+                {
+                    r_MenuItems.Add((byte)o_Values[i], new MenuItem(o_Name[i], (byte)o_Values[i], this));
+                }
+            }
+
+        public MainMenu()
+            : base(k_MainMenuTitle, 0, null)
+        {
         }
 
         public override bool IsFinalItem
@@ -62,6 +77,18 @@ namespace Ex04.Menus.Delegates
             sb.AppendLine(string.Format(k_ChoiceQuestion, minCosi, minCosi, backStr));
 
             return sb.ToString();
+        }
+
+        public void Add(Type i_EnumType, string i_Title)
+        {
+            if (!i_EnumType.IsEnum)
+            {
+                throw new Exception("Type mast be a enum");
+            }
+
+            byte indexOfNewMenu = (byte)(r_MenuItems.Count + 1);
+            MainMenu subMainMenu = new MainMenu(i_EnumType, i_Title, indexOfNewMenu, this);
+            r_MenuItems.Add(indexOfNewMenu, subMainMenu);
         }
 
         public int CountSpaceInText(string i_TextForInspection)
