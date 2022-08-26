@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Program
+namespace Ex04.Menus.Interfaces
 {
-    internal class MainMenu
+    internal class MenuItem
     {
     }
 }
