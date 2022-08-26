@@ -6,52 +6,85 @@ using System.Threading.Tasks;
 
 namespace Ex04.Menus.Delegates
 {
-    //internal class MenuItem<TEnum> where TEnum : Enum
-        //private TEnum m_EnunVal;
+    public delegate void ChoiceInvoker(MenuItem i_MenuItem);
+
     internal class MenuItem
     {
-        private const string k_Back = "Back";
-        private const string k_LinedisplayFormt = "{0} ==> {1}";
+        private const bool v_IsFinalItem = true;
+        private const string k_LineDisplayFormt = "{0} ==> {1}";
+
+        // Member
         private byte m_Value;
-        private readonly Dictionary<Enum, MenuItem> r_MenuItems;
         private string m_Title;
+        private MenuItem m_Parent;
+        public event ChoiceInvoker m_ChoiceInvoker;
+
+        public bool IsRoot
+        {
+            get { return m_Parent != null; }
+            set
+            {
+                if(value)
+                {
+                    m_Parent = null;
+                }
+            }
+        }
 
         public string Title
         {
             get { return m_Title; }
             set { m_Title = value; }
         }
-        public bool IsFinalItem
+        public virtual bool IsFinalItem
         {
             get
             {
-                return !(r_MenuItems.Count > 0);
+                return v_IsFinalItem;
             }
         }
-        
-        private readonly bool r_IsMainMenu;
+        public byte Value
+        {
+            get { return m_Value; }
+            set { m_Value = value; }
+        }
+        public MenuItem Parent
+        {
+            get 
+            {
+                return m_Parent; 
+            }
+            set 
+            {
+                m_Parent = value; 
+            }
+        }
 
-        public MenuItem(string i_Title, byte i_Value, bool i_IsMainMenu, Type i_EnumType,)
+        public MenuItem(string i_Title, byte i_Value, MenuItem i_Parent)
         {
             Title = i_Title;
-            r_IsMainMenu = i_IsMainMenu;
             m_Value = i_Value; 
-            string[] names = Enum.GetNames(i_EnumType);
-            int[] values = (int[])Enum.GetValues(i_EnumType);
-
-            foreach (string name in names)
-            {
-                
-            }
-
+            m_Parent = i_Parent;
         }
 
-
-        public override string ToString()
+        public void Add()
         {
-            //Enum.GetName(typeof(Days), value);
 
-            return string.Format(k_LinedisplayFormt, m_Value, m_Title);
+        }
+        public string Show()
+        {
+            return string.Format(k_LineDisplayFormt, m_Value, m_Title);
+        }
+
+ 
+
+        protected virtual void OnClicked()
+        {
+            // lets tell the form that I was clicked:
+            if (m_ChoiceInvoker != null)
+            {
+                m_ChoiceInvoker.Invoke(this);
+            }
         }
     }
 }
