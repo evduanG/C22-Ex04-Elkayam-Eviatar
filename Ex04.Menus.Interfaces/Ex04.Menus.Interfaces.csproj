@@ -44,8 +44,13 @@
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.118\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="eExceptionType.cs" />
+    <Compile Include="IMenuItemSelectedNotifier.cs" />
+    <Compile Include="IMenuItemSelectedObserver.cs" />
     <Compile Include="MainMenu.cs" />
     <Compile Include="MenuItem.cs" />
+    <Compile Include="Screen.cs" />
+    <Compile Include="UserInput.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
