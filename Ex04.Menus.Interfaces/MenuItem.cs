@@ -11,7 +11,6 @@ namespace Ex04.Menus.Interfaces
         private readonly List<MenuItem> r_SubMenuItems;
         private readonly string r_Title;
 
-        // TODO: change to single observer?
         protected readonly List<IMenuItemSelectedObserver> r_MenuItemSelectedObservers = new List<IMenuItemSelectedObserver>();
 
         // Properties:
@@ -70,13 +69,20 @@ namespace Ex04.Menus.Interfaces
             {
                 // show sub-menu
                 MainMenu.MenuHistory.Push(i_MenuItem);
-                Screen.ShowTitle(i_MenuItem.Title);
+                if (SubMenuItems.IndexOf(i_MenuItem) != -1)
+                {
+                    Screen.ShowTitle(i_MenuItem.Title, SubMenuItems.IndexOf(i_MenuItem) + 1);
+                }
+                else
+                {
+                    Screen.ShowTitle(i_MenuItem.Title);
+                }
+
                 Screen.ShowSubMenus(i_MenuItem);
             }
             else
             {
                 // activate action - send item up to observer
-                Console.WriteLine("action activated");
                 ((IMenuItemSelectedNotifier)this).NotifiyObserver(i_MenuItem);
                 UserInput.AwaitProgression();
             }

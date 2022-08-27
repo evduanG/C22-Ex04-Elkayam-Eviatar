@@ -18,7 +18,7 @@ namespace Ex04.Menus.Interfaces
 
         public TestSystem()
         {
-            r_MyMenu = new MainMenu("Master Kenobi Main Menu~~");
+            r_MyMenu = new MainMenu("~Obi-Wan Kenobi Main Menu~");
 
             MenuItem subMenu1 = new MenuItem("sub-menu-1");
             MenuItem subMenu2 = new MenuItem("sub-menu-2");

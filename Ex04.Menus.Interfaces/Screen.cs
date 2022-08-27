@@ -10,7 +10,7 @@ namespace Ex04.Menus.Interfaces
     {
         private const string k_ParsingErrorMesage = "Invalid type of input, please try again!";
         private const string k_ValueOutOfBoundsMesage = "No such option available, please try again!";
-        private const string k_LineSeparator = "======================";
+        private const string k_LineSeparator = "================================";
 
         private const string k_MenuOptionStructure = "{0}. {1}";
         private const string k_PromptStructure1 = "Please enter one of the options above ({0}-{1} or 0 to exit):";

@@ -8,6 +8,7 @@ namespace Ex04.Menus.Interfaces
 {
     public class MainMenu : MenuItem, IMenuItemSelectedObserver, IMenuItemSelectedNotifier
     {
+        // TODO: make it a member of MainMenu (because it is unique to every instance of MainMenu) AND accessible from MenuItem Class (?)
         internal static Stack<MenuItem> s_MenuHistory = new Stack<MenuItem>();
 
         public static Stack<MenuItem> MenuHistory
@@ -109,6 +110,7 @@ namespace Ex04.Menus.Interfaces
             while (!choseQuit);
 
             Screen.Print("Goodbye!");
+            UserInput.AwaitProgression();
         }
 
         /// <summary>

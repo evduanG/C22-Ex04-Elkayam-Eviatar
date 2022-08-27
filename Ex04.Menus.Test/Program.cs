@@ -13,7 +13,6 @@ namespace Program
         {
             TestSystem sys = new TestSystem();
             sys.MyMenu.Show();
-            Console.ReadLine();
         }
     }
 }
