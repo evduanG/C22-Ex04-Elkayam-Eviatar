@@ -6,6 +6,9 @@
 
         void DetachObserver(IMenuItemSelectedObserver i_MenuItemSelectedObserver);
 
+        /// <summary>
+        /// Notify observer (previous menu item) which menu item was selected
+        /// </summary>
         void NotifiyObserver(MenuItem i_MenuItem);
     }
 }

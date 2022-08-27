@@ -43,7 +43,7 @@ namespace Ex04.Menus.Interfaces
         {
             Console.WriteLine("Enter your name: ");
             string name = Console.ReadLine();
-            Console.WriteLine("hello " + name + " :D");
+            Console.WriteLine("Hello There, " + name + " :D");
         }
 
         public void TestMethod3()

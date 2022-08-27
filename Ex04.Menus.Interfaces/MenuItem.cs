@@ -42,9 +42,6 @@ namespace Ex04.Menus.Interfaces
             r_MenuItemSelectedObservers.Remove(i_MenuItemSelectedObserver);
         }
 
-        /// <summary>
-        /// Notify observer (previous menu item) which menu item was selected
-        /// </summary>
         void IMenuItemSelectedNotifier.NotifiyObserver(MenuItem i_MenuItem)
         {
             foreach(IMenuItemSelectedObserver observer in r_MenuItemSelectedObservers)

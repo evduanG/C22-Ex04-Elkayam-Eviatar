@@ -11,6 +11,7 @@ namespace Ex04.Menus.Interfaces
         // TODO: make it a member of MainMenu (because it is unique to every instance of MainMenu) AND accessible from MenuItem Class (?)
         internal static Stack<MenuItem> s_MenuHistory = new Stack<MenuItem>();
 
+        // Properties
         public static Stack<MenuItem> MenuHistory
         {
             get { return s_MenuHistory; }
@@ -30,27 +31,6 @@ namespace Ex04.Menus.Interfaces
         {
             ((IMenuItemSelectedNotifier)this).NotifiyObserver(item);
         }
-
-        /**
-        internal override void DoWhenSelected(MenuItem i_MenuItem)
-        {
-            if (i_MenuItem.HasSubMenus())
-            {
-                // show sub-menus
-                MenuHistory.Push(i_MenuItem);
-                Screen.ShowTitle(i_MenuItem.Title);
-                Screen.ShowSubMenus(i_MenuItem);
-            }
-            else
-            {
-                // activate action - send item up to observer
-                Console.WriteLine("action activated");
-                ((IMenuItemSelectedNotifier)this).NotifiyObserver(i_MenuItem);
-
-                UserInput.AwaitProgression();
-            }
-        }
-        **/
 
         // Methods as MainMenu
 
