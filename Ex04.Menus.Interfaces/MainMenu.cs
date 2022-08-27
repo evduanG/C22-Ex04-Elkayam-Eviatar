@@ -8,23 +8,7 @@ namespace Ex04.Menus.Interfaces
 {
     public class MainMenu : MenuItem, IMenuItemSelectedObserver, IMenuItemSelectedNotifier
     {
-        //internal static MenuItem m_PreviousMenuItem;
-        //internal static MenuItem m_SelectedMenuItem;
-
-        internal static Stack<MenuItem> s_MenuHistory = MenuHistory = new Stack<MenuItem>();
-
-        // Properties
-        //public MenuItem PreviousMenuItem
-        //{
-        //    get { return m_PreviousMenuItem; }
-        //    set { m_PreviousMenuItem = value; }
-        //}
-
-        //public MenuItem SelectedMenuItem
-        //{
-        //    get { return m_SelectedMenuItem; }
-        //    set { m_SelectedMenuItem = value; }
-        //}
+        internal static Stack<MenuItem> s_MenuHistory = new Stack<MenuItem>();
 
         public static Stack<MenuItem> MenuHistory
         {
@@ -38,8 +22,6 @@ namespace Ex04.Menus.Interfaces
         {
             MenuHistory.Push(this);
             MenuHistory.Push(this);
-            //m_PreviousMenuItem = this;
-            //m_SelectedMenuItem = this;
         }
 
         // Methods as OBSERVER:
@@ -48,6 +30,7 @@ namespace Ex04.Menus.Interfaces
             ((IMenuItemSelectedNotifier)this).NotifiyObserver(item);
         }
 
+        /**
         internal override void DoWhenSelected(MenuItem i_MenuItem)
         {
             if (i_MenuItem.HasSubMenus())
@@ -62,13 +45,11 @@ namespace Ex04.Menus.Interfaces
                 // activate action - send item up to observer
                 Console.WriteLine("action activated");
                 ((IMenuItemSelectedNotifier)this).NotifiyObserver(i_MenuItem);
-                MenuHistory.Push(this);
 
                 UserInput.AwaitProgression();
-                //Screen.ClearScreen();
-                //Screen.ShowSubMenus(this);
             }
         }
+        **/
 
         // Methods as MainMenu
 
@@ -104,29 +85,25 @@ namespace Ex04.Menus.Interfaces
                         {
                             MenuItem chosenItem = currentMenuItem.SubMenuItems[itemSelectedIndex - 1];
                             MenuHistory.Push(chosenItem);
-
-                            //PreviousMenuItem = SelectedMenuItem;
-                            //SelectedMenuItem = chosenItem;
-
-                            // Screen.ClearScreen();
                         }
                     }
-
                 }
                 catch (ArgumentOutOfRangeException)
                 {
                     Screen.ShowErrorMessage(eExceptionType.ValueOutOfBounds);
+                    UserInput.AwaitProgression();
                 }
                 catch (ArgumentException)
                 {
                     Screen.ShowErrorMessage(eExceptionType.Parsing);
+                    UserInput.AwaitProgression();
                 }
                 catch (Exception e)
                 {
                     Screen.Print("unknown exception: " + e.Message);
+                    UserInput.AwaitProgression();
                 }
 
-                UserInput.AwaitProgression();
                 Screen.ClearScreen();
             }
             while (!choseQuit);

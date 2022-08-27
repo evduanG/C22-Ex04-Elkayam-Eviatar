@@ -60,9 +60,13 @@ namespace Ex04.Menus.Interfaces
             DoWhenSelected(item);
         }
 
-        internal virtual void DoWhenSelected(MenuItem i_MenuItem)
+        /// <summary>
+        /// show sub-menus if available, otherwise activate the item
+        /// </summary>
+        /// <param name="i_MenuItem"></param>
+        internal void DoWhenSelected(MenuItem i_MenuItem)
         {
-            if(i_MenuItem.HasSubMenus())
+            if (i_MenuItem.HasSubMenus())
             {
                 // show sub-menu
                 MainMenu.MenuHistory.Push(i_MenuItem);
@@ -74,11 +78,7 @@ namespace Ex04.Menus.Interfaces
                 // activate action - send item up to observer
                 Console.WriteLine("action activated");
                 ((IMenuItemSelectedNotifier)this).NotifiyObserver(i_MenuItem);
-                MainMenu.MenuHistory.Pop();
-
                 UserInput.AwaitProgression();
-                //Screen.ClearScreen();
-                //Screen.ShowSubMenus(this);
             }
         }
 
