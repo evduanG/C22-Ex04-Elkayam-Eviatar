@@ -2,6 +2,6 @@
 {
     public interface IMenuItemSelectedObserver
     {
-        void OnMenuItemSelected(MenuItem item);
+        void OnMenuItemSelected(MenuItem i_MenuItem);
     }
 }

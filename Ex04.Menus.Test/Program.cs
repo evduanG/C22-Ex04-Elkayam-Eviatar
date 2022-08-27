@@ -12,7 +12,7 @@ namespace Program
         public static void Main()
         {
             TestSystem sys = new TestSystem();
-            sys.r_MyMenu.Show();
+            sys.MyMenu.Show();
             Console.ReadLine();
         }
     }

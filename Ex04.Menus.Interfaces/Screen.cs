@@ -10,10 +10,11 @@ namespace Ex04.Menus.Interfaces
     {
         private const string k_ParsingErrorMesage = "Invalid type of input, please try again!";
         private const string k_ValueOutOfBoundsMesage = "No such option available, please try again!";
-        private const string k_LineSeparator = "==================";
+        private const string k_LineSeparator = "======================";
 
         private const string k_MenuOptionStructure = "{0}. {1}";
-        private const string k_PromptStructure = "Please enter one of the options above ({0}-{1} or 0 to exit):";
+        private const string k_PromptStructure1 = "Please enter one of the options above ({0}-{1} or 0 to exit):";
+        private const string k_PromptStructure2 = "Please enter one of the options above ({0}-{1} or 0 to go back):";
 
         /// <summary>
         /// Write a string on console
@@ -93,9 +94,16 @@ namespace Ex04.Menus.Interfaces
         /// </summary>
         /// <param name="i_FirstMenuItemIndex"></param>
         /// <param name="i_SecondMEnuItemIndex"></param>
-        public static void ShowMenuPrompt(int i_FirstMenuItemIndex, int i_SecondMEnuItemIndex)
+        public static void ShowMenuPrompt(MenuItem i_menuItem, int i_FirstMenuItemIndex, int i_SecondMEnuItemIndex)
         {
-            Print(k_PromptStructure, i_FirstMenuItemIndex.ToString(), i_SecondMEnuItemIndex.ToString());
+            if (i_menuItem is MainMenu)
+            {
+                Print(k_PromptStructure1, i_FirstMenuItemIndex.ToString(), i_SecondMEnuItemIndex.ToString());
+            }
+            else
+            {
+                Print(k_PromptStructure2, i_FirstMenuItemIndex.ToString(), i_SecondMEnuItemIndex.ToString());
+            }
         }
 
         /// <summary>

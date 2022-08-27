@@ -11,6 +11,7 @@ namespace Ex04.Menus.Interfaces
         private readonly List<MenuItem> r_SubMenuItems;
         private readonly string r_Title;
 
+        // TODO: change to single observer?
         protected readonly List<IMenuItemSelectedObserver> r_MenuItemSelectedObservers = new List<IMenuItemSelectedObserver>();
 
         // Properties:
@@ -42,45 +43,46 @@ namespace Ex04.Menus.Interfaces
             r_MenuItemSelectedObservers.Remove(i_MenuItemSelectedObserver);
         }
 
+        /// <summary>
+        /// Notify observer (previous menu item) which menu item was selected
+        /// </summary>
         void IMenuItemSelectedNotifier.NotifiyObserver(MenuItem i_MenuItem)
         {
             foreach(IMenuItemSelectedObserver observer in r_MenuItemSelectedObservers)
             {
-                observer.OnMenuItemSelected(this);
+                observer.OnMenuItemSelected(i_MenuItem);
             }
         }
 
         // Methods as OBSERVER:
         void IMenuItemSelectedObserver.OnMenuItemSelected(MenuItem item)
         {
-            Screen.ClearScreen();
-            item.DoWhenSelected();
+            DoWhenSelected(item);
         }
 
-        // Methods as MenuItem:
-        internal void DoWhenSelected()
+        internal virtual void DoWhenSelected(MenuItem i_MenuItem)
         {
-            if(r_SubMenuItems.Count > 0)
+            if(i_MenuItem.HasSubMenus())
             {
                 // show sub-menu
-                Screen.ShowTitle(r_Title);
-                Screen.ShowSubMenus(this);
+                MainMenu.MenuHistory.Push(i_MenuItem);
+                Screen.ShowTitle(i_MenuItem.Title);
+                Screen.ShowSubMenus(i_MenuItem);
             }
             else
             {
                 // activate action - send item up to observer
                 Console.WriteLine("action activated");
-                ((IMenuItemSelectedNotifier)this).NotifiyObserver(this);
-                
-                // TODO: think about what to after selected
+                ((IMenuItemSelectedNotifier)this).NotifiyObserver(i_MenuItem);
+                MainMenu.MenuHistory.Pop();
 
-                //if (r_MenuItemSelectedObservers[0] is MenuItem)
-                //{
-                //    Screen.ShowSubMenus(r_MenuItemSelectedObservers[0] as MenuItem);
-                //    ((MenuItem)r_MenuItemSelectedObservers[0]).Show();
-                //}
+                UserInput.AwaitProgression();
+                //Screen.ClearScreen();
+                //Screen.ShowSubMenus(this);
             }
         }
+
+        // Methods as MenuItem:
 
         /// <summary>
         /// Add sub-menu item to the menu
@@ -100,64 +102,13 @@ namespace Ex04.Menus.Interfaces
             }
         }
 
-        // TOOD: move to main menu?
-        public void Show()
-        {
-            bool choseQuit = false;
-            MenuItem currentMenu = this;
-            do
-            {
-                try
-                {
-                    currentMenu.DoWhenSelected();
-                    Screen.ShowMenuPrompt(1, currentMenu.SubMenuItems.Count);
-                    int itemSelectedIndex = UserInput.ReadSelection();
-                    authenticate(itemSelectedIndex, 0, currentMenu.SubMenuItems.Count);
-
-                    if (itemSelectedIndex == 0)
-                    {
-                        choseQuit = true;
-                    }
-                    else
-                    {
-                        MenuItem chosenItem = SubMenuItems[itemSelectedIndex - 1];
-                        currentMenu = chosenItem;
-                    }
-                }
-                catch (ArgumentOutOfRangeException)
-                {
-                    Screen.ShowErrorMessage(eExceptionType.ValueOutOfBounds);
-                }
-                catch (ArgumentException)
-                {
-                    Screen.ShowErrorMessage(eExceptionType.Parsing);
-                }
-                catch (Exception e)
-                {
-                    Screen.Print("unknown exception: " + e.Message);
-                }
-
-                //UserInput.AwaitProgression();
-                //Screen.ClearScreen();
-            }
-            while (!choseQuit);
-
-            Screen.Print("Goodbye!");
-        }
-
         /// <summary>
-        /// Validate that the index given is within lower and upper bounds (inclusive)
+        /// Check if this instance of MenuItem has sub-menus
         /// </summary>
-        /// <param name="i_ItemSelectedIndex"></param>
-        /// <param name="i_LowerBound"></param>
-        /// <param name="i_UpperBound"></param>
-        /// <exception cref="ArgumentOutOfRangeException"></exception>
-        private void authenticate(int i_ItemSelectedIndex, int i_LowerBound, int i_UpperBound)
+        /// <returns>True if has sub-menus</returns>
+        internal bool HasSubMenus()
         {
-            if (i_ItemSelectedIndex < i_LowerBound || i_ItemSelectedIndex > i_UpperBound)
-            {
-                throw new ArgumentOutOfRangeException();
-            }
+            return SubMenuItems.Count > 0;
         }
     }
 }
