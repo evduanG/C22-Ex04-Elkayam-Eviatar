@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{101660FB-6756-4F76-B2EB-69534376AEB5}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>Ex04.Menus.Test</RootNamespace>
-    <AssemblyName>Ex04.Menus.Test</AssemblyName>
+    <ProjectGuid>{1430379C-DD4B-4D1A-874A-5A3262FB8730}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Ex04.Menus.Interfaces</RootNamespace>
+    <AssemblyName>Ex04.Menus.Interfaces</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -32,33 +32,28 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Program.cs" />
-    <Compile Include="TestSystem.cs" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.118\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.118\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Ex04.Menus.Interfaces\Ex04.Menus.Interfaces.csproj">
-      <Project>{1430379c-dd4b-4d1a-874a-5a3262fb8730}</Project>
-      <Name>Ex04.Menus.Interfaces</Name>
-    </ProjectReference>
+    <Compile Include="eExceptionType.cs" />
+    <Compile Include="IMenuItemSelectedNotifier.cs" />
+    <Compile Include="IMenuItemSelectedObserver.cs" />
+    <Compile Include="MainMenu.cs" />
+    <Compile Include="MenuItem.cs" />
+    <Compile Include="Screen.cs" />
+    <Compile Include="UserInput.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Ex04.Menus. Interfaces\Ex04.Menus.Interfaces.csproj">
-      <Project>{1430379c-dd4b-4d1a-874a-5a3262fb8730}</Project>
-      <Name>Ex04.Menus.Interfaces</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Ex04.Menus.Delegates\Ex04.Menus.Delegates.csproj">
-      <Project>{6e901f3c-111f-4d7d-8256-97c3ee51d806}</Project>
-      <Name>Ex04.Menus.Delegates</Name>
-    </ProjectReference>
+    <Reference Include="System" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
