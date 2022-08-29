@@ -18,6 +18,7 @@ namespace Ex04.Menus.Delegates
         private readonly Dictionary<byte, MenuItem> r_MenuItems;
 
         public const string k_Version = "Version: 22.3.4.8650";
+
         public MainMenu(Enum i_Enum, MenuItem i_MenuItem)
             :base(i_MenuItem.Title, i_MenuItem.Value, i_MenuItem.Parent)
         {
@@ -114,17 +115,21 @@ namespace Ex04.Menus.Delegates
             DateTime now = DateTime.Now;
             return string.Format("{ 1:g}", now.TimeOfDay);
         }
-        
+
         protected virtual void Back_evant()
         {
             if(IsRoot)
             {
-                Exit_evant();
             }
             else
             {
-                Back_evant(Parent);
             }
+        }
+
+        private void changThis(MainMenu i_ThisMainMenu, MainMenu i_MainMenuToChang )
+        {
+
+            i_ThisMainMenu = i_MainMenuToChang;
         }
 
     }

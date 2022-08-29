@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="eDateTime.cs" />
+    <Compile Include="eExceptionType.cs" />
     <Compile Include="eVersionAndSpaces.cs" />
     <Compile Include="MainMenu.cs" />
     <Compile Include="MenuItem.cs" />

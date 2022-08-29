@@ -16,20 +16,8 @@ namespace Ex04.Menus.Delegates
         // Member
         private byte m_Value;
         private string m_Title;
-        private MenuItem m_Parent;
-        public event ChoiceInvoker m_ChoiceInvoker;
 
-        public bool IsRoot
-        {
-            get { return m_Parent != null; }
-            set
-            {
-                if(value)
-                {
-                    m_Parent = null;
-                }
-            }
-        }
+        public event ChoiceInvoker m_ChoiceInvoker;
 
         public string Title
         {
@@ -48,23 +36,12 @@ namespace Ex04.Menus.Delegates
             get { return m_Value; }
             set { m_Value = value; }
         }
-        public MenuItem Parent
-        {
-            get 
-            {
-                return m_Parent; 
-            }
-            set 
-            {
-                m_Parent = value; 
-            }
-        }
+
 
         public MenuItem(string i_Title, byte i_Value, MenuItem i_Parent)
         {
             Title = i_Title;
             m_Value = i_Value; 
-            m_Parent = i_Parent;
         }
 
         public string Show()

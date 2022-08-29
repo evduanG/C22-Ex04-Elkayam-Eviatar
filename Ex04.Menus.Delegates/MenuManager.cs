@@ -12,7 +12,6 @@ namespace Ex04.Menus.Delegates
         private UserInput m_UserInput;
         private MainMenu m_MainMenu;
 
-
         public MenuManager()
         {
             m_Screen = new Screen();
