@@ -20,16 +20,21 @@ namespace Ex04.Menus.Interfaces
         {
             r_MyMenu = new MainMenu("~Obi-Wan Kenobi Main Menu~");
 
-            MenuItem subMenu1 = new MenuItem("sub-menu-1");
-            MenuItem subMenu2 = new MenuItem("sub-menu-2");
+            MenuItem subMenu1 = new MenuItem(r_MyMenu, "sub-menu-1");
+            MenuItem subMenu2 = new MenuItem(r_MyMenu, "sub-menu-2");
 
-            subMenu1.AddMenuItem(new MenuItem("Test1"));
-            subMenu1.AddMenuItem(new MenuItem("Test2"));
+            // added these lines to the ctor :D
 
-            subMenu2.AddMenuItem(new MenuItem("Test3"));
+            // r_MyMenu.AddMenuItem(subMenu1);
+            // r_MyMenu.AddMenuItem(subMenu2);
 
-            r_MyMenu.AddMenuItem(subMenu1);
-            r_MyMenu.AddMenuItem(subMenu2);
+            MenuItem test1 = new MenuItem(subMenu1, "Test1");
+            MenuItem test2 = new MenuItem(subMenu1, "Test2");
+            MenuItem test3 = new MenuItem(subMenu2, "Test3");
+
+            // subMenu1.AddMenuItem(new MenuItem(subMenu1, "Test1"));
+            // subMenu1.AddMenuItem(new MenuItem(subMenu1, "Test2"));
+            // subMenu2.AddMenuItem(new MenuItem(subMenu2, "Test3"));
 
             ((IMenuItemSelectedNotifier)r_MyMenu).AttachObserver(this as IMenuItemSelectedObserver);
         }
@@ -51,7 +56,7 @@ namespace Ex04.Menus.Interfaces
             Console.WriteLine("Version: 22.3.4.8650");
         }
 
-        void IMenuItemSelectedObserver.OnMenuItemSelected(MenuItem i_MenuItem)
+        void IMenuItemSelectedObserver.MenuItem_Selected(MenuItem i_MenuItem)
         {
             switch (i_MenuItem.Title)
             {

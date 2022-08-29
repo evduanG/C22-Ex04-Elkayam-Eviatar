@@ -9,6 +9,7 @@ namespace Ex04.Menus.Interfaces
     public class MenuItem : IMenuItemSelectedObserver, IMenuItemSelectedNotifier
     {
         private readonly List<MenuItem> r_SubMenuItems;
+        private readonly MenuItem r_ParentMenu;
         private readonly string r_Title;
 
         protected readonly List<IMenuItemSelectedObserver> r_MenuItemSelectedObservers = new List<IMenuItemSelectedObserver>();
@@ -24,10 +25,21 @@ namespace Ex04.Menus.Interfaces
             get { return r_SubMenuItems; }
         }
 
+        public MenuItem ParentMenu
+        {
+            get { return r_ParentMenu; }
+        }
+
         // Constructor:
-        public MenuItem(string i_Title)
+        public MenuItem(MenuItem i_ParentMenu, string i_Title)
         {
             r_Title = i_Title;
+            r_ParentMenu = i_ParentMenu;
+            if (i_ParentMenu != null)
+            {
+                i_ParentMenu.AddMenuItem(this);
+            }
+
             r_SubMenuItems = new List<MenuItem>();
         }
 
@@ -46,12 +58,12 @@ namespace Ex04.Menus.Interfaces
         {
             foreach(IMenuItemSelectedObserver observer in r_MenuItemSelectedObservers)
             {
-                observer.OnMenuItemSelected(i_MenuItem);
+                observer.MenuItem_Selected(i_MenuItem);
             }
         }
 
         // Methods as OBSERVER:
-        void IMenuItemSelectedObserver.OnMenuItemSelected(MenuItem item)
+        void IMenuItemSelectedObserver.MenuItem_Selected(MenuItem item)
         {
             DoWhenSelected(item);
         }
@@ -60,19 +72,19 @@ namespace Ex04.Menus.Interfaces
         /// show sub-menus if available, otherwise activate the item
         /// </summary>
         /// <param name="i_MenuItem"></param>
-        internal void DoWhenSelected(MenuItem i_MenuItem)
+        internal static void DoWhenSelected(MenuItem i_MenuItem)
         {
             if (i_MenuItem.HasSubMenus())
             {
                 // show sub-menu
-                MainMenu.MenuHistory.Push(i_MenuItem);
-                if (SubMenuItems.IndexOf(i_MenuItem) != -1)
+                MenuItem parentMenuOfSelectedMenu = i_MenuItem.ParentMenu;
+                if(i_MenuItem is MainMenu)
                 {
-                    Screen.ShowTitle(i_MenuItem.Title, SubMenuItems.IndexOf(i_MenuItem) + 1);
+                    Screen.ShowTitle(i_MenuItem.Title);
                 }
                 else
                 {
-                    Screen.ShowTitle(i_MenuItem.Title);
+                    Screen.ShowTitle(i_MenuItem.Title, parentMenuOfSelectedMenu.SubMenuItems.IndexOf(i_MenuItem) + 1);
                 }
 
                 Screen.ShowSubMenus(i_MenuItem);
@@ -80,7 +92,7 @@ namespace Ex04.Menus.Interfaces
             else
             {
                 // activate action - send item up to observer
-                ((IMenuItemSelectedNotifier)this).NotifiyObserver(i_MenuItem);
+                ((IMenuItemSelectedNotifier)i_MenuItem.ParentMenu).NotifiyObserver(i_MenuItem);
                 UserInput.AwaitProgression();
             }
         }
