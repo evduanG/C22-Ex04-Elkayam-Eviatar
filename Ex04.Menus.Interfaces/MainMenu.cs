@@ -6,28 +6,18 @@ using System.Threading.Tasks;
 
 namespace Ex04.Menus.Interfaces
 {
-    public class MainMenu : MenuItem, IMenuItemSelectedObserver, IMenuItemSelectedNotifier
+    public class MainMenu : MenuItem, IMenuItemSelectedObserver
     {
-        // TODO: make it a member of MainMenu (because it is unique to every instance of MainMenu) AND accessible from MenuItem Class (?)
-        internal static Stack<MenuItem> s_MenuHistory = new Stack<MenuItem>();
-
-        // Properties
-        public static Stack<MenuItem> MenuHistory
-        {
-            get { return s_MenuHistory; }
-            set { s_MenuHistory = value; }
-        }
+        private const int k_ExitSymbol = 0;
 
         // Constructor
         public MainMenu(string i_Title)
-            : base(i_Title)
+            : base(null, i_Title)
         {
-            MenuHistory.Push(this);
-            MenuHistory.Push(this);
         }
 
         // Methods as OBSERVER:
-        void IMenuItemSelectedObserver.OnMenuItemSelected(MenuItem item)
+        void IMenuItemSelectedObserver.MenuItem_Selected(MenuItem item)
         {
             ((IMenuItemSelectedNotifier)this).NotifiyObserver(item);
         }
@@ -40,33 +30,43 @@ namespace Ex04.Menus.Interfaces
         public void Show()
         {
             bool choseQuit = false;
+            MenuItem currentMenuToShow = this;
+
             do
             {
                 try
                 {
-                    MenuItem currentMenuItem = MenuHistory.Pop();
-                    MenuHistory.Peek().DoWhenSelected(currentMenuItem);
+                    DoWhenSelected(currentMenuToShow);
 
-                    if (currentMenuItem.HasSubMenus())
+                    if (currentMenuToShow.HasSubMenus())
                     {
-                        Screen.ShowMenuPrompt(currentMenuItem, 1, currentMenuItem.SubMenuItems.Count);
+                        Screen.ShowMenuPrompt(currentMenuToShow, 1, currentMenuToShow.SubMenuItems.Count);
                         int itemSelectedIndex = UserInput.ReadSelection();
-                        Authenticate(itemSelectedIndex, 0, currentMenuItem.SubMenuItems.Count);
+                        Authenticate(itemSelectedIndex, 0, currentMenuToShow.SubMenuItems.Count);
 
-                        if (itemSelectedIndex == 0)
+                        if (itemSelectedIndex == k_ExitSymbol)
                         {
-                            if (currentMenuItem is MainMenu)
+                            if (currentMenuToShow is MainMenu)
                             {
                                 choseQuit = true;
                             }
-
-                            MenuHistory.Pop();
+                            else
+                            {
+                                // go back a menu
+                                currentMenuToShow = currentMenuToShow.ParentMenu;
+                            }
                         }
                         else
                         {
-                            MenuItem chosenItem = currentMenuItem.SubMenuItems[itemSelectedIndex - 1];
-                            MenuHistory.Push(chosenItem);
+                            // go forward
+                            MenuItem chosenItem = currentMenuToShow.SubMenuItems[itemSelectedIndex - 1];
+                            currentMenuToShow = chosenItem;
                         }
+                    }
+                    else
+                    {
+                        // go back a menu
+                        currentMenuToShow = currentMenuToShow.ParentMenu;
                     }
                 }
                 catch (ArgumentOutOfRangeException)
