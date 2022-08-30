@@ -14,6 +14,7 @@ namespace Program
         private const string k_TitleMainMenu = "Deleates Main Menu";
         private const string k_TitleSubMenueVersionAndSpaces = "Version And Spaces";
         private const string k_TitleSubMenueDateTime = "Show Date/Time";
+        private const string k_WaitForAnyInpu = "Enter any input to continue";
 
         private const string k_Version = "Version: 22.3.4.8650";
         private const string k_StrFormtOfCountSpace = @"There is a {0} Space in the line 
@@ -24,7 +25,9 @@ namespace Program
 
         public static void Main()
         {
+            Console.WriteLine("hlow word!");
             initiationDelegatesMainMenu(out DelegatesMainMenu io_MainMenuDelegates);
+            io_MainMenuDelegates.Show();
         }
 
         private static bool initiationDelegatesMainMenu(out DelegatesMainMenu io_MainMenuDelegates)
@@ -38,16 +41,16 @@ namespace Program
                 subMenueVersionAndSpaces.CreatMenuItemFromEnum(typeof(eVersionAndSpaces));
                 subMenueVersionAndSpaces[eVersionAndSpaces.ShowVersion].SelectItemOccured += MenuItem_Select_Version;
                 subMenueVersionAndSpaces[eVersionAndSpaces.CountSpaces].SelectItemOccured += MenuItem_Select_CountSpaces;
-                subMenueVersionAndSpaces.AddReturnItem();
                 io_MainMenuDelegates.AddSubMenue(subMenueVersionAndSpaces);
+
 
                 // add Version And Spaces
                 DelegatesMainMenu subMenueDateTime = new DelegatesMainMenu(k_TitleSubMenueDateTime);
-                subMenueVersionAndSpaces.CreatMenuItemFromEnum(typeof(eDateTime));
-                subMenueVersionAndSpaces[eDateTime.ShowTime].SelectItemOccured += MenuItem_Select_ShowTime;
-                subMenueVersionAndSpaces[eDateTime.ShowDate].SelectItemOccured += MenuItem_Select_ShowDate;
-                subMenueVersionAndSpaces.AddReturnItem();
+                subMenueDateTime.CreatMenuItemFromEnum(typeof(eDateTime));
+                subMenueDateTime[eDateTime.ShowTime].SelectItemOccured += MenuItem_Select_ShowTime;
+                subMenueDateTime[eDateTime.ShowDate].SelectItemOccured += MenuItem_Select_ShowDate;
                 io_MainMenuDelegates.AddSubMenue(subMenueDateTime);
+
                 initiationDelegates = true;
             }
             catch(Exception ex)
@@ -61,6 +64,7 @@ namespace Program
         public static void MenuItem_Select_Version(object sender)
         {
             Console.WriteLine(k_Version);
+            waitForAnyInput();
         }
 
         public static void MenuItem_Select_CountSpaces(object sender)
@@ -68,6 +72,13 @@ namespace Program
             string userInputToCount = getLineForCountSpaces();
             int numOfSpaces = countSpacaes(userInputToCount, k_SpacesChar);
             Console.WriteLine(string.Format(k_StrFormtOfCountSpace, numOfSpaces, userInputToCount));
+            waitForAnyInput();
+        }
+
+        private static void waitForAnyInput()
+        {
+            Console.WriteLine(k_WaitForAnyInpu);
+            Console.Read();
         }
 
         private static int countSpacaes(string i_StrToCount, char i_CharToCount)
@@ -94,11 +105,13 @@ namespace Program
         public static void MenuItem_Select_ShowDate(object sender)
         {
             showDateTime(eDateTime.ShowDate);
+            waitForAnyInput();
         }
 
         public static void MenuItem_Select_ShowTime(object sender)
         {
             showDateTime(eDateTime.ShowTime);
+            waitForAnyInput();
         }
 
         private static void showDateTime(eDateTime i_DateTime)

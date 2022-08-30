@@ -30,7 +30,7 @@ namespace Ex04.Menus.Delegates
         }
 
         public bool IsRoot
-        { get { return m_ParentMenu != null; } }
+        { get { return m_ParentMenu == null; } }
 
         public MenuItem(string i_Title)
         {
@@ -46,7 +46,16 @@ namespace Ex04.Menus.Delegates
 
         protected virtual void OnSelectItem(MenuItem item)
         {
+            if(SelectItemOccured != null)
+            {
+                SelectItemOccured(item);
+            }
+        }
 
+        internal void SelectItem()
+        {
+            Console.WriteLine(string.Format("slact {0}", Title));
+            OnSelectItem(this);
         }
     }
 }

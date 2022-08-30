@@ -77,7 +77,7 @@ namespace Ex04.Menus.Delegates
         public static void ShowMenuPrompt(MainMenu i_MainMenuToPrint)
         {
             ClearScreen();
-           // Print(i_MainMenuToPrint.CreateMenuStr());
+            Print(i_MainMenuToPrint.CreateMenuStrToPrint());
         }
 
         internal static void ShowEror(Exception e)
