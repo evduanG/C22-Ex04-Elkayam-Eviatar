@@ -5,29 +5,29 @@ using System.Text;
 using System.Threading.Tasks;
 using Ex04.Menus.Test;
 using DelegatesMainMenu = Ex04.Menus.Delegates.MainMenu;
-using InterfacesMenu = Ex04.Menus.Interfaces;
 
+// using InterfacesMenu = Ex04.Menus.Interfaces;
 namespace Program
 {
     internal class Program
     {
+        private const char k_SpacesChar = ' ';
         private const string k_TitleMainMenu = "Deleates Main Menu";
         private const string k_TitleSubMenueVersionAndSpaces = "Version And Spaces";
         private const string k_TitleSubMenueDateTime = "Show Date/Time";
         private const string k_WaitForAnyInpu = "Enter any input to continue";
-
         private const string k_Version = "Version: 22.3.4.8650";
-        private const string k_StrFormtOfCountSpace = @"There is a {0} Space in the line 
-{1}";
-
         private const string k_AskForLineToCountSpaces = @"Please enter the desired line where you want to count the Spaces";
-        private const char k_SpacesChar = ' ';
+        private const string k_StrFormtOfCountSpace = @"There is a {0} Space in the line :
+{1}";
 
         public static void Main()
         {
-            Console.WriteLine("hlow word!");
-            initiationDelegatesMainMenu(out DelegatesMainMenu io_MainMenuDelegates);
-            io_MainMenuDelegates.Show();
+            bool isInitSecsucceeded = initiationDelegatesMainMenu(out DelegatesMainMenu io_MainMenuDelegates);
+            if(isInitSecsucceeded)
+            {
+                io_MainMenuDelegates.Show();
+            }
         }
 
         private static bool initiationDelegatesMainMenu(out DelegatesMainMenu io_MainMenuDelegates)
@@ -42,7 +42,6 @@ namespace Program
                 subMenueVersionAndSpaces[eVersionAndSpaces.ShowVersion].SelectItemOccured += MenuItem_Select_Version;
                 subMenueVersionAndSpaces[eVersionAndSpaces.CountSpaces].SelectItemOccured += MenuItem_Select_CountSpaces;
                 io_MainMenuDelegates.AddSubMenue(subMenueVersionAndSpaces);
-
 
                 // add Version And Spaces
                 DelegatesMainMenu subMenueDateTime = new DelegatesMainMenu(k_TitleSubMenueDateTime);

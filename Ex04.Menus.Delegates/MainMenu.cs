@@ -6,19 +6,16 @@ using System.Threading.Tasks;
 
 namespace Ex04.Menus.Delegates
 {
-
     public class MainMenu : MenuItem
     {
         private const string k_TitleDisplayFormt = "**{0}**";
         private const string k_LineSeparatorFormt = "--------------------------";
         private const string k_ChoiceQuestion = "Enter your requst ({0} to {1} or `0` to {2} )";
         private const string k_LineDisplayFormt = "{0} ==> {1}";
-
-
-        private static MainMenu s_CorntMenuLevel = null;
         private const byte k_ReturnItemKey = 0;
         private const string k_BackTitle = "Back";
         private const string k_ExitTitle = "Exit";
+        private static MainMenu s_CorntMenuLevel = null;
         private readonly Dictionary<byte, MenuItem> r_SubMenuItems;
 
         public MainMenu(string i_Title)
@@ -101,49 +98,63 @@ namespace Ex04.Menus.Delegates
             }
         }
 
-        public void AddSubMenue(MainMenu subMenueVersionAndSpaces)
+        public void AddSubMenue(MainMenu i_SubMenueVersionAndSpaces)
         {
             byte index = (byte)this.r_SubMenuItems.Count;
             Console.WriteLine(index);
             index++;
             Console.WriteLine(index);
 
-            subMenueVersionAndSpaces.ParentMenu = this;
+            i_SubMenueVersionAndSpaces.ParentMenu = this;
             while(r_SubMenuItems.ContainsKey(index))
             {
                 index++;
             }
 
-            this.r_SubMenuItems.Add(index, subMenueVersionAndSpaces);
+            this.r_SubMenuItems.Add(index, i_SubMenueVersionAndSpaces);
             this[index].SelectItemOccured += OnSelectItem;
         }
 
-        internal string CreateMenuStrToPrint()
+        public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine(string.Format(k_TitleDisplayFormt, Title));
-            byte minCosi = byte.MaxValue;
-            byte maxCosi = byte.MinValue;
-            string backStr = k_BackTitle;
+            sb.AppendLine(getTitleToString());
+            byte minOption = byte.MaxValue;
+            byte maxOption = byte.MinValue;
             sb.AppendLine(k_LineSeparatorFormt);
 
             foreach (KeyValuePair<byte, MenuItem> item in r_SubMenuItems)
             {
-                minCosi = Math.Min(minCosi, item.Key);
-                maxCosi = Math.Max(maxCosi, item.Key);
+                minOption = Math.Min(minOption, item.Key);
+                maxOption = Math.Max(maxOption, item.Key);
                 sb.AppendLine(string.Format(k_LineDisplayFormt, item.Key, item.Value.Title));
             }
 
-            if (IsRoot)
-            {
-                backStr = k_ExitTitle;
-            }
-            sb.AppendLine(string.Format(k_LineDisplayFormt, k_ReturnItemKey, backStr));
+            sb.AppendLine(getReturnOptionToString());
             sb.AppendLine(k_LineSeparatorFormt);
 
-            sb.AppendLine(string.Format(k_ChoiceQuestion, minCosi, minCosi, backStr));
+            sb.AppendLine(getSelectionToSting(minOption, maxOption));
 
             return sb.ToString();
+        }
+
+        private string getTitleToString()
+        {
+            return string.Format(k_TitleDisplayFormt, Title);
+        }
+
+        private string getSelectionToSting(byte i_MinOption, byte i_MaxOption)
+        {
+            string backStr = IsRoot ? k_ExitTitle : k_BackTitle;
+
+            return string.Format(k_ChoiceQuestion, i_MinOption, i_MaxOption, backStr);
+        }
+
+        private string getReturnOptionToString()
+        {
+            string backStr = IsRoot ? k_ExitTitle : k_BackTitle;
+
+            return string.Format(k_LineDisplayFormt, k_ReturnItemKey, backStr);
         }
 
         public void CreatMenuItemFromEnum(Type i_EnumType)
@@ -201,9 +212,9 @@ namespace Ex04.Menus.Delegates
             }
         }
 
-        protected virtual void OnSelectItem(MenuItem item)
+        protected override void OnSelectItem(MenuItem i_Item)
         {
-            MainMenu mainMenuToSwictTo = item as MainMenu;
+            MainMenu mainMenuToSwictTo = i_Item as MainMenu;
             if (mainMenuToSwictTo != null)
             {
                 s_CorntMenuLevel = mainMenuToSwictTo;

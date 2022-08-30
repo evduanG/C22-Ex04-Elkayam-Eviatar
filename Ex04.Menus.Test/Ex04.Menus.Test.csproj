@@ -40,7 +40,6 @@
     <Compile Include="eDateTime.cs" />
     <Compile Include="eVersionAndSpaces.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="TestSystem.cs" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.118\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
