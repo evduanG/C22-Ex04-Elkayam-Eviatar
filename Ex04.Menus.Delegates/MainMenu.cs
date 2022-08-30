@@ -6,131 +6,113 @@ using System.Threading.Tasks;
 
 namespace Ex04.Menus.Delegates
 {
-    internal class MainMenu : MenuItem
+
+    public class MainMenu : MenuItem
     {
-        private const string k_Exit = "Exit";
-        private const string k_Back = "Back";
-        private const string k_TitleDisplayFormt = "**{0}**";
-        private const string k_LineSeparatorFormt = "--------------------------";
-        private const string k_ChoiceQuestion = "Enter your requst ({0} to {1} or `0` to {2}";
-        private const string k_MainMenuTitle = "Deleates Main Menu";
+        private const byte k_ReturnItemKey = 0;
+        private const string k_BackTitle = "Back";
+        private const string k_ExitTitle = "Exit";
+        private readonly Dictionary<byte, MenuItem> r_SubMenuItems;
 
-        private readonly Dictionary<byte, MenuItem> r_MenuItems;
-
-        public const string k_Version = "Version: 22.3.4.8650";
-
-        public MainMenu(Enum i_Enum, MenuItem i_MenuItem)
-            :base(i_MenuItem.Title, i_MenuItem.Value, i_MenuItem.Parent)
+        public MainMenu(string i_Title)
+          : base(i_Title)
         {
-            bool isTypeEnum = GetvaluesAndNamesFormEnum(i_Enum.GetType(), out string[] o_Name, out int[] o_Values);
-            r_MenuItems = new Dictionary<byte, MenuItem>();
-            for(int i = 0; i < o_Name.Length; i++)
-            {
-                r_MenuItems.Add((byte)o_Values[i], new MenuItem(o_Name[i], (byte)o_Values[i], this));
-            }
+            r_SubMenuItems = new Dictionary<byte, MenuItem>();
         }
 
-        public MainMenu(Type i_Enum, string i_Title, byte i_Value, MenuItem i_Parent)
-                :base(i_Title, i_Value, i_Parent)
+        public MenuItem this[byte i_Index] {
+            get
             {
-                bool isTypeEnum = GetvaluesAndNamesFormEnum(i_Enum.GetType(), out string[] o_Name, out int[] o_Values);
-                r_MenuItems = new Dictionary<byte, MenuItem>();
-                for(int i = 0; i < o_Name.Length; i++)
+                bool isExist = r_SubMenuItems.TryGetValue(i_Index, out MenuItem o_menuItem);
+                if(!isExist)
                 {
-                    r_MenuItems.Add((byte)o_Values[i], new MenuItem(o_Name[i], (byte)o_Values[i], this));
+                    throw new FormatException("Member does not exist");
                 }
+
+                return o_menuItem;
             }
 
-        public MainMenu()
-            : base(k_MainMenuTitle, 0, null)
-        {
+            set
+            {
+                r_SubMenuItems[i_Index] = value;
+            }
         }
 
-        public override bool IsFinalItem
+        public MenuItem this[Enum i_EnumInex]
         {
             get
             {
-                return !(r_MenuItems.Count > 0);
+                byte index = (byte)i_EnumInex.GetTypeCode();
+                return this[index];
+            }
+
+            set
+            {
+                byte index = (byte)i_EnumInex.GetTypeCode();
+                this[index] = value;
             }
         }
 
-        public string Show()
+        public void AddSubMenue(MainMenu subMenueVersionAndSpaces)
         {
-            StringBuilder sb = new StringBuilder(string.Format(k_TitleDisplayFormt, Title));
-            byte minCosi = 1;
-            byte maxCosi = 1;
-            string backStr = k_Back;
-            sb.AppendLine(k_LineSeparatorFormt);
-
-            foreach (MenuItem item in r_MenuItems.Values)
-            {
-                minCosi = Math.Min(minCosi, item.Value);
-                maxCosi = Math.Max(maxCosi, item.Value);
-                sb.AppendLine(item.Show());
-            }
-
-            sb.AppendLine(k_LineSeparatorFormt);
-
-            if (IsRoot)
-            {
-                backStr = k_Exit;
-            }
-            sb.AppendLine(string.Format(k_ChoiceQuestion, minCosi, minCosi, backStr));
-
-            return sb.ToString();
+            byte index = (byte)this.r_SubMenuItems.Count;
+            index++;
+            subMenueVersionAndSpaces.ParentMenu = this;
+            this.r_SubMenuItems.Add(index, subMenueVersionAndSpaces);
         }
 
-        public void Add(Type i_EnumType, string i_Title)
+        public void AddReturnItem()
+        {
+            if(!r_SubMenuItems.ContainsKey(k_ReturnItemKey))
+            {
+                string titelOfReturn = k_BackTitle;
+                if (IsRoot)
+                {
+                    titelOfReturn = k_ExitTitle;
+                }
+
+                r_SubMenuItems.Add(k_ReturnItemKey, new MenuItem(titelOfReturn, this));
+            }
+        }
+
+        public void CreatMenuItemFromEnum(Type i_EnumType)
+        {
+            if(!i_EnumType.IsEnum)
+            {
+                throw new ArgumentException("Wrong front the type must be enum");
+            }
+
+            string[] names = Enum.GetNames(i_EnumType);
+            byte[] indexKey = (byte[])Enum.GetValues(i_EnumType);
+            for (int i = 0; i < names.Length; i++)
+            {
+                if (indexKey[i] == k_ReturnItemKey)
+                {
+                    removeAllFromDictionaryByEnum(i_EnumType);
+                    throw new FormatException(string.Format("the enum {0} is invalid, The value {1} cannot be part of the elements in {0}", nameof(i_EnumType), k_ReturnItemKey));
+                }
+
+                r_SubMenuItems.Add(indexKey[i], new MenuItem(names[i]));
+            }
+        }
+
+        private void removeAllFromDictionaryByEnum(Type i_EnumType)
         {
             if (!i_EnumType.IsEnum)
             {
-                throw new Exception("Type mast be a enum");
+                throw new ArgumentException("Wrong front the type must be enum");
             }
 
-            byte indexOfNewMenu = (byte)(r_MenuItems.Count + 1);
-            MainMenu subMainMenu = new MainMenu(i_EnumType, i_Title, indexOfNewMenu, this);
-            r_MenuItems.Add(indexOfNewMenu, subMainMenu);
-        }
-
-        public int CountSpaceInText(string i_TextForInspection)
-        {
-            int spaceInText = 0;
-
-            return spaceInText;
-        }
-
-        public string ShowVersion()
-        {
-            return k_Version;
-        }
-
-        public string ShowTime()
-        {
-            DateTime now = DateTime.Now;
-            return string.Format("{ 1:g}", now.TimeOfDay);
-        }
-
-        public string ShowDate()
-        {
-            DateTime now = DateTime.Now;
-            return string.Format("{ 1:g}", now.TimeOfDay);
-        }
-
-        protected virtual void Back_evant()
-        {
-            if(IsRoot)
+            byte[] indexKey = (byte[])Enum.GetValues(i_EnumType);
+            foreach (byte key in indexKey)
             {
-            }
-            else
-            {
+                r_SubMenuItems.Remove(key);
             }
         }
 
-        private void changThis(MainMenu i_ThisMainMenu, MainMenu i_MainMenuToChang )
+        protected virtual void OnSelectItem(MenuItem item)
         {
-
-            i_ThisMainMenu = i_MainMenuToChang;
+            
         }
-
     }
 }

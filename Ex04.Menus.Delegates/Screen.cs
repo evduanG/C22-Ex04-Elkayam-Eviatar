@@ -59,7 +59,7 @@ namespace Ex04.Menus.Delegates
         /// <summary>
         /// Clears the console
         /// </summary>
-        internal static void ClearScreen()
+        private static void ClearScreen()
         {
             Console.Clear();
         }
@@ -68,59 +68,38 @@ namespace Ex04.Menus.Delegates
         /// Go over the sub-menus list and print in format
         /// </summary>
         /// <param name="i_SubMenusToShow"></param>
-        public static void ShowSubMenus(MenuItem i_MenuItem)
-        {
-            int index = 1;
-            foreach (MenuItem menuItem in i_MenuItem.SubMenuItems)
-            {
-                Print(k_MenuOptionStructure, index.ToString(), menuItem.Title);
-                index++;
-            }
-
-            if (i_MenuItem is MainMenu)
-            {
-                Print(k_MenuOptionStructure, "0", "Exit");
-            }
-            else
-            {
-                Print(k_MenuOptionStructure, "0", "Back");
-            }
-
-            Print(k_LineSeparator);
-        }
 
         /// <summary>
         /// Print menu option prompt using the range of options available
         /// </summary>
         /// <param name="i_FirstMenuItemIndex"></param>
         /// <param name="i_SecondMEnuItemIndex"></param>
-        public static void ShowMenuPrompt(MenuItem i_menuItem, int i_FirstMenuItemIndex, int i_SecondMEnuItemIndex)
+        public static void ShowMenuPrompt(MainMenu i_MainMenuToPrint)
         {
-            if (i_menuItem is MainMenu)
-            {
-                Print(k_PromptStructure1, i_FirstMenuItemIndex.ToString(), i_SecondMEnuItemIndex.ToString());
-            }
-            else
-            {
-                Print(k_PromptStructure2, i_FirstMenuItemIndex.ToString(), i_SecondMEnuItemIndex.ToString());
-            }
+            ClearScreen();
+           // Print(i_MainMenuToPrint.CreateMenuStr());
+        }
+
+        internal static void ShowEror(Exception e)
+        {
+            Print(e.Message);
         }
 
         /// <summary>
         /// Print message according to the exception type given
         /// </summary>
         /// <param name="i_ErrorType"></param>
-        public static void ShowErrorMessage(eExceptionType i_ErrorType)
-        {
-            switch (i_ErrorType)
-            {
-                case eExceptionType.Parsing:
-                    Print(k_ParsingErrorMesage);
-                    break;
-                case eExceptionType.ValueOutOfBounds:
-                    Print(k_ValueOutOfBoundsMesage);
-                    break;
-            }
-        }
+        //public static void ShowErrorMessage(eExceptionType i_ErrorType)
+        //{
+        //    switch (i_ErrorType)
+        //    {
+        //        case eExceptionType.Parsing:
+        //            Print(k_ParsingErrorMesage);
+        //            break;
+        //        case eExceptionType.ValueOutOfBounds:
+        //            Print(k_ValueOutOfBoundsMesage);
+        //            break;
+        //    }
+        //}
     }
 }

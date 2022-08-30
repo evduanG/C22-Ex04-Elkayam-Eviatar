@@ -32,15 +32,15 @@ namespace Ex04.Menus.Delegates
             /// </summary>
             /// <returns>Menu item index selected</returns>
             /// <exception cref="ArgumentException"></exception>
-        public static int ReadSelection()
+        public static byte ReadSelection()
             {
-                if (int.TryParse(Read(), out int selection))
+                if (byte.TryParse(Read(), out byte selection))
                 {
                     return selection;
                 }
                 else
                 {
-                    throw new ArgumentException("Argument exception");
+                    throw new ArgumentException("Argument exception:Your selection was not in the correct format");
                 }
             }
 
