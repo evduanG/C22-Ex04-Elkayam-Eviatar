@@ -98,7 +98,7 @@ namespace Ex04.Menus.Delegates
             }
         }
 
-        public void AddSubMenue(MainMenu i_SubMenueVersionAndSpaces)
+        public void AddMenuItem(MenuItem i_SubMenueVersionAndSpaces)
         {
             byte index = (byte)this.r_SubMenuItems.Count;
             Console.WriteLine(index);

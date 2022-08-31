@@ -1,7 +1,6 @@
-﻿
-namespace Ex04.Menus.Test
+﻿namespace Ex04.Menus.Test
 {
-    internal enum eVersionAndSpaces
+    public enum eVersionAndSpaces
     {
         CountSpaces = 1,
         ShowVersion = 2,

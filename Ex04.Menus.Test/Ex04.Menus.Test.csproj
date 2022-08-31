@@ -37,7 +37,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="eActions.cs" />
     <Compile Include="eDateTime.cs" />
     <Compile Include="eVersionAndSpaces.cs" />
     <Compile Include="Program.cs" />
@@ -65,10 +64,6 @@
       <Project>{6e901f3c-111f-4d7d-8256-97c3ee51d806}</Project>
       <Name>Ex04.Menus.Delegates</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="MainMenuD_old.txt" />
-    <Content Include="MenuItemD_old.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
