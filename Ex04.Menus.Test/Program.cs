@@ -28,9 +28,9 @@ namespace Ex04.Menus.Test
                 r_MainMenu.Show();
             }
 
-            void IMenuItemSelectedObserver.MenuItem_Selected(MenuItem i_MenuItem)
+            void IMenuItemSelectedObserver.MenuItem_Selected(MenuItem i_SelectedMenuItem)
             {
-                switch (i_MenuItem.Action)
+                switch (i_SelectedMenuItem.Action)
                 {
                     case eVersionAndSpaces.CountSpaces:
                         CountSpaces();
