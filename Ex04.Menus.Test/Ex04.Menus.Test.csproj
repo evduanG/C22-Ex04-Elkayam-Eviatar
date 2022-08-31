@@ -37,7 +37,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="eActions.cs" />
     <Compile Include="Program.cs" />
   </ItemGroup>
   <ItemGroup>
