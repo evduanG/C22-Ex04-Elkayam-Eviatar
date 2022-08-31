@@ -11,6 +11,7 @@ namespace Ex04.Menus.Interfaces
         private readonly List<MenuItem> r_SubMenuItems;
         private readonly MenuItem r_ParentMenu;
         private readonly string r_Title;
+        private readonly Enum r_Action;
 
         protected readonly List<IMenuItemSelectedObserver> r_MenuItemSelectedObservers = new List<IMenuItemSelectedObserver>();
 
@@ -30,6 +31,11 @@ namespace Ex04.Menus.Interfaces
             get { return r_ParentMenu; }
         }
 
+        public Enum Action
+        {
+            get { return r_Action; }
+        }
+
         // Constructor:
         public MenuItem(MenuItem i_ParentMenu, string i_Title)
         {
@@ -40,7 +46,14 @@ namespace Ex04.Menus.Interfaces
                 i_ParentMenu.AddMenuItem(this);
             }
 
+            r_Action = null;
             r_SubMenuItems = new List<MenuItem>();
+        }
+
+        public MenuItem(MenuItem i_ParentMenu, string i_Title, Enum i_Action)
+            : this(i_ParentMenu, i_Title)
+        {
+            r_Action = i_Action;
         }
 
         // Methods as NOTIFIER
