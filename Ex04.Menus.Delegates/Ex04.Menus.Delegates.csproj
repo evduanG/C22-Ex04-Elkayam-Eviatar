@@ -44,11 +44,8 @@
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.118\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="eDateTime.cs" />
-    <Compile Include="eVersionAndSpaces.cs" />
     <Compile Include="MainMenu.cs" />
     <Compile Include="MenuItem.cs" />
-    <Compile Include="MenuManager.cs" />
     <Compile Include="Screen.cs" />
     <Compile Include="UserInput.cs" />
   </ItemGroup>

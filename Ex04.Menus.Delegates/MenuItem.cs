@@ -6,97 +6,57 @@ using System.Threading.Tasks;
 
 namespace Ex04.Menus.Delegates
 {
-    internal delegate void ChoiceInvoker(MenuItem i_MenuItem);
+    public delegate void SelectItemHandler(MenuItem i_MenuItem);
 
-    internal class MenuItem
+    public class MenuItem
     {
-        private const bool v_IsFinalItem = true;
-        private const string k_LineDisplayFormt = "{0} ==> {1}";
+        private MainMenu m_ParentMenu;
 
-        // Member
-        private byte m_Value;
+        public event SelectItemHandler SelectItemOccured;
+
         private string m_Title;
-        private MenuItem m_Parent;
-        public event ChoiceInvoker m_ChoiceInvoker;
 
-        public bool IsRoot
-        {
-            get { return m_Parent != null; }
-            set
-            {
-                if(value)
-                {
-                    m_Parent = null;
-                }
-            }
-        }
-
+        // Properties:
         public string Title
         {
             get { return m_Title; }
             set { m_Title = value; }
         }
-        public virtual bool IsFinalItem
+
+        public MainMenu ParentMenu
         {
-            get
-            {
-                return v_IsFinalItem;
-            }
-        }
-        public byte Value
-        {
-            get { return m_Value; }
-            set { m_Value = value; }
-        }
-        public MenuItem Parent
-        {
-            get 
-            {
-                return m_Parent; 
-            }
-            set 
-            {
-                m_Parent = value; 
-            }
+            get { return m_ParentMenu; }
+            set { m_ParentMenu = value; }
         }
 
-        public MenuItem(string i_Title, byte i_Value, MenuItem i_Parent)
+        public bool IsRoot
         {
-            Title = i_Title;
-            m_Value = i_Value; 
-            m_Parent = i_Parent;
+            get { return m_ParentMenu == null; }
         }
 
-        public string Show()
+        public MenuItem(string i_Title)
         {
-            return string.Format(k_LineDisplayFormt, m_Value, m_Title);
+            m_Title = i_Title;
+            m_ParentMenu = null;
         }
 
-        protected virtual void OnClicked()
+        public MenuItem(string i_Title, MainMenu i_ParentMenu)
         {
-            // lets tell the form that I was clicked:
-            if (m_ChoiceInvoker != null)
+            m_Title = i_Title;
+            m_ParentMenu = i_ParentMenu;
+        }
+
+        protected virtual void OnSelectItem(MenuItem i_Item)
+        {
+            if(SelectItemOccured != null)
             {
-                m_ChoiceInvoker.Invoke(this);
+                SelectItemOccured(i_Item);
             }
         }
 
-        internal static bool GetvaluesAndNamesFormEnum(Type i_EnumType, out string[] o_Name, out int[] o_values)
+        internal void SelectItem()
         {
-            bool isSucceed = false;
-
-            if (i_EnumType.IsEnum)
-            {
-                o_Name = Enum.GetNames(i_EnumType);
-                o_values = (int[])Enum.GetValues(i_EnumType);
-            }
-            else
-            {
-                o_Name = null;
-                o_values = null;
-            }
-
-            return isSucceed;
+            OnSelectItem(this);
         }
     }
 }

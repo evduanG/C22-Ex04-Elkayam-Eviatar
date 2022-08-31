@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ex04.Menus.Delegates
+namespace Ex04.Menus.Test
 {
-    internal enum eVersionAndSpaces
+    public enum eDateTime
     {
-        CountSpaces= 1,
-        ShowVersion =2,
+        ShowTime = 1,
+        ShowDate = 2,
     }
 }
