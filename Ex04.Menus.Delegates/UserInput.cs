@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ex04.Menus.Delegates
 {
@@ -27,7 +23,7 @@ namespace Ex04.Menus.Delegates
                 return Console.ReadLine().Trim();
             }
 
-            /// <summary>
+        /// <summary>
             /// Get menu index selected from the user
             /// </summary>
             /// <returns>Menu item index selected</returns>

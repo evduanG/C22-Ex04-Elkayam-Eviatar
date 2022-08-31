@@ -10,12 +10,12 @@ namespace Ex04.Menus.Delegates
     {
         private const string k_TitleDisplayFormt = "**{0}**";
         private const string k_LineSeparatorFormt = "--------------------------";
-        private const string k_ChoiceQuestion = "Enter your requst ({0} to {1} or `0` to {2} )";
+        private const string k_ChoiceQuestion = "Enter your request ({0} to {1} or `0` to {2} )";
         private const string k_LineDisplayFormt = "{0} ==> {1}";
         private const byte k_ReturnItemKey = 0;
         private const string k_BackTitle = "Back";
         private const string k_ExitTitle = "Exit";
-        private static MainMenu s_CorntMenuLevel = null;
+        private static MainMenu s_CurrentMenuLevel = null;
         private readonly Dictionary<byte, MenuItem> r_SubMenuItems;
 
         public MainMenu(string i_Title)
@@ -28,13 +28,13 @@ namespace Ex04.Menus.Delegates
         {
             get
             {
-                bool isExist = r_SubMenuItems.TryGetValue(i_Index, out MenuItem o_menuItem);
+                bool isExist = r_SubMenuItems.TryGetValue(i_Index, out MenuItem o_MenuItem);
                 if(!isExist)
                 {
                     throw new FormatException("Member does not exist");
                 }
 
-                return o_menuItem;
+                return o_MenuItem;
             }
 
             set
@@ -45,18 +45,18 @@ namespace Ex04.Menus.Delegates
 
         public void Show()
         {
-            s_CorntMenuLevel = this;
-            while (s_CorntMenuLevel != null)
+            s_CurrentMenuLevel = this;
+            while (s_CurrentMenuLevel != null)
             {
-                Screen.ShowMenuPrompt(s_CorntMenuLevel);
+                Screen.ShowMenuPrompt(s_CurrentMenuLevel);
                 byte userChoice = getUserChoice();
                 if (userChoice == k_ReturnItemKey)
                 {
-                    s_CorntMenuLevel = s_CorntMenuLevel.ParentMenu;
+                    s_CurrentMenuLevel = s_CurrentMenuLevel.ParentMenu;
                 }
                 else
                 {
-                    s_CorntMenuLevel[userChoice].SelectItem();
+                    s_CurrentMenuLevel[userChoice].SelectItem();
                 }
             }
         }
@@ -100,7 +100,7 @@ namespace Ex04.Menus.Delegates
 
         public void AddMenuItem(MenuItem i_SubMenueVersionAndSpaces)
         {
-            byte index = (byte)this.r_SubMenuItems.Count;
+            byte index = (byte)r_SubMenuItems.Count;
             Console.WriteLine(index);
             index++;
             Console.WriteLine(index);
@@ -111,7 +111,7 @@ namespace Ex04.Menus.Delegates
                 index++;
             }
 
-            this.r_SubMenuItems.Add(index, i_SubMenueVersionAndSpaces);
+            r_SubMenuItems.Add(index, i_SubMenueVersionAndSpaces);
             this[index].SelectItemOccured += OnSelectItem;
         }
 
@@ -214,10 +214,9 @@ namespace Ex04.Menus.Delegates
 
         protected override void OnSelectItem(MenuItem i_Item)
         {
-            MainMenu mainMenuToSwictTo = i_Item as MainMenu;
-            if (mainMenuToSwictTo != null)
+            if (i_Item is MainMenu mainMenuToSwictTo)
             {
-                s_CorntMenuLevel = mainMenuToSwictTo;
+                s_CurrentMenuLevel = mainMenuToSwictTo;
             }
         }
     }
