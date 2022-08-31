@@ -29,6 +29,7 @@ namespace Ex04.Menus.Delegates
             get
             {
                 bool isExist = r_SubMenuItems.TryGetValue(i_Index, out MenuItem o_MenuItem);
+
                 if(!isExist)
                 {
                     throw new FormatException("Member does not exist");
@@ -46,11 +47,14 @@ namespace Ex04.Menus.Delegates
         public void Show()
         {
             s_CurrentMenuLevel = this;
+
             while (s_CurrentMenuLevel != null)
             {
                 Screen.ShowMenuPrompt(s_CurrentMenuLevel);
                 byte userChoice = getUserChoice();
-                if (userChoice == k_ReturnItemKey)
+                bool isExist = userChoice == k_ReturnItemKey;
+
+                if (isExist)
                 {
                     s_CurrentMenuLevel = s_CurrentMenuLevel.ParentMenu;
                 }
@@ -101,11 +105,9 @@ namespace Ex04.Menus.Delegates
         public void AddMenuItem(MenuItem i_SubMenueVersionAndSpaces)
         {
             byte index = (byte)r_SubMenuItems.Count;
-            Console.WriteLine(index);
             index++;
-            Console.WriteLine(index);
-
             i_SubMenueVersionAndSpaces.ParentMenu = this;
+
             while(r_SubMenuItems.ContainsKey(index))
             {
                 index++;
@@ -117,10 +119,10 @@ namespace Ex04.Menus.Delegates
 
         public override string ToString()
         {
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine(getTitleToString());
             byte minOption = byte.MaxValue;
             byte maxOption = byte.MinValue;
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine(getTitleToString());
             sb.AppendLine(k_LineSeparatorFormt);
 
             foreach (KeyValuePair<byte, MenuItem> item in r_SubMenuItems)
@@ -132,7 +134,6 @@ namespace Ex04.Menus.Delegates
 
             sb.AppendLine(getReturnOptionToString());
             sb.AppendLine(k_LineSeparatorFormt);
-
             sb.AppendLine(getSelectionToSting(minOption, maxOption));
 
             return sb.ToString();
@@ -145,16 +146,17 @@ namespace Ex04.Menus.Delegates
 
         private string getSelectionToSting(byte i_MinOption, byte i_MaxOption)
         {
-            string backStr = IsRoot ? k_ExitTitle : k_BackTitle;
-
-            return string.Format(k_ChoiceQuestion, i_MinOption, i_MaxOption, backStr);
+            return string.Format(k_ChoiceQuestion, i_MinOption, i_MaxOption, getBackStr());
         }
 
         private string getReturnOptionToString()
         {
-            string backStr = IsRoot ? k_ExitTitle : k_BackTitle;
+            return string.Format(k_LineDisplayFormt, k_ReturnItemKey, getBackStr());
+        }
 
-            return string.Format(k_LineDisplayFormt, k_ReturnItemKey, backStr);
+        private string getBackStr()
+        {
+            return IsRoot ? k_ExitTitle : k_BackTitle;
         }
 
         public void CreatMenuItemFromEnum(Type i_EnumType)
@@ -166,6 +168,7 @@ namespace Ex04.Menus.Delegates
 
             string[] names = Enum.GetNames(i_EnumType);
             int[] indexKey = (int[])Enum.GetValues(i_EnumType);
+
             for (int i = 0; i < names.Length; i++)
             {
                 if (indexKey[i] == k_ReturnItemKey)
@@ -174,7 +177,6 @@ namespace Ex04.Menus.Delegates
                     throw new FormatException(string.Format("the enum {0} is invalid, The value {1} cannot be part of the elements in {0}", nameof(i_EnumType), k_ReturnItemKey));
                 }
 
-                Console.WriteLine((byte)indexKey[i]);
                 string nameModify = addSpacesBeforeCapitalLetter(names[i]);
                 r_SubMenuItems.Add((byte)indexKey[i], new MenuItem(nameModify, this));
             }
@@ -184,9 +186,11 @@ namespace Ex04.Menus.Delegates
         {
             StringBuilder sb = new StringBuilder();
             sb.Append(i_StrToModify[0]);
+
             for(int i = 1; i < i_StrToModify.Length; i++)
             {
                 bool isLetterUpper = char.IsUpper(i_StrToModify[i]);
+
                 if (isLetterUpper)
                 {
                     sb.Append(' ');
@@ -206,15 +210,16 @@ namespace Ex04.Menus.Delegates
             }
 
             byte[] indexKey = (byte[])Enum.GetValues(i_EnumType);
+
             foreach (byte key in indexKey)
             {
                 r_SubMenuItems.Remove(key);
             }
         }
 
-        protected override void OnSelectItem(MenuItem i_Item)
+        protected override void OnSelectItem(MenuItem i_SelectItem)
         {
-            if (i_Item is MainMenu mainMenuToSwictTo)
+            if (i_SelectItem is MainMenu mainMenuToSwictTo)
             {
                 s_CurrentMenuLevel = mainMenuToSwictTo;
             }
