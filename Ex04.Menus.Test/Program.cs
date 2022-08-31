@@ -3,74 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Ex04.Menus.Test;
+using Ex04.Menus.Interfaces;
 using DelegatesMainMenu = Ex04.Menus.Delegates.MainMenu;
+using InterfacesMainMenu = Ex04.Menus.Interfaces.MainMenu;
+using InterfacesMenuItem = Ex04.Menus.Interfaces.MenuItem;
 
-
-// using InterfacesMenu = Ex04.Menus.Interfaces;
-namespace Program
+namespace Ex04.Menus.Test
 {
     internal class Program : IMenuItemSelectedObserver
     {
- // master
-        private MainMenu m_MainMenu1;
-        private MainMenu m_MainMenu2;
-
-        public Program()
-        {
-            m_MainMenu1 = createIterfaceMenu();
-
-            // m_MainMenu2 = createDelegateMenu();
-        }
-
-        public static void Main()
-        {
-            Program testProgram = new Program();
-
-            testProgram.m_MainMenu1.Show();
-            // testProgram.m_MainMenu2.Show();
-        }
-
-        private MainMenu createIterfaceMenu()
-        {
-            MainMenu mainMenu2 = new MainMenu("Interface Main Menu");
-            MenuItem firstLevelMenu1 = new MenuItem(mainMenu2, "Version and Spaces");
-            MenuItem firstLevelMenu2 = new MenuItem(mainMenu2, "Show Date/Time");
-            _ = new MenuItem(firstLevelMenu1, "Count Spaces", eActions.CountSpaces);
-            _ = new MenuItem(firstLevelMenu1, "Show Version", eActions.ShowVersion);
-            _ = new MenuItem(firstLevelMenu2, "Show Time", eActions.ShowTime);
-            _ = new MenuItem(firstLevelMenu2, "Show Date", eActions.ShowDate);
-
-            ((IMenuItemSelectedNotifier)mainMenu2).AttachObserver(this as IMenuItemSelectedObserver);
-            return mainMenu2;
-        }
-
-        public static void CountSpaces()
-        {
-            Console.WriteLine("Please enter your sentence:");
-            string userSentence = Console.ReadLine();
-            int numOfSpaces = 0;
-
-            foreach(char c in userSentence)
-            {
-               if(c == ' ')
-                {
-                    numOfSpaces++;
-                }
-            }
-
-            Console.WriteLine("There are {0} spaces in your sentence", numOfSpaces);
-        }
-
-        public static void ShowVersion()
-        {
-            Console.WriteLine("Version: 22.3.4.8650");
-        }
-
-        public static void ShowTime()
-        {
-            Console.WriteLine("{0}:{1}", DateTime.Now.Hour, DateTime.Now.Minute);
-          // 
+        // master
         private const char k_SpacesChar = ' ';
         private const string k_TitleMainMenu = "Deleates Main Menu";
         private const string k_TitleSubMenueVersionAndSpaces = "Version And Spaces";
@@ -81,16 +23,41 @@ namespace Program
         private const string k_StrFormtOfCountSpace = @"There is a {0} Space in the line :
 {1}";
 
+        private InterfacesMainMenu m_MainMenu;
+
+        public Program()
+        {
+            m_MainMenu = createIterfaceMenu();
+        }
+
         public static void Main()
         {
-            bool isInitSecsucceeded = initiationDelegatesMainMenu(out DelegatesMainMenu io_MainMenuDelegates);
-            if(isInitSecsucceeded)
+            Program testProgram = new Program();
+
+            testProgram.m_MainMenu.Show();
+
+            bool isInitSecsucceeded = createDelegatesMainMenu(out DelegatesMainMenu io_MainMenuDelegates);
+            if (isInitSecsucceeded)
             {
                 io_MainMenuDelegates.Show();
             }
         }
 
-        private static bool initiationDelegatesMainMenu(out DelegatesMainMenu io_MainMenuDelegates)
+        private MainMenu createIterfaceMenu()
+        {
+            MainMenu mainMenu2 = new MainMenu("Interface Main Menu");
+            InterfacesMenuItem firstLevelMenu1 = new InterfacesMenuItem(mainMenu2, "Version and Spaces");
+            InterfacesMenuItem firstLevelMenu2 = new InterfacesMenuItem(mainMenu2, "Show Date/Time");
+            _ = new InterfacesMenuItem(firstLevelMenu1, "Count Spaces", eActions.CountSpaces);
+            _ = new InterfacesMenuItem(firstLevelMenu1, "Show Version", eActions.ShowVersion);
+            _ = new InterfacesMenuItem(firstLevelMenu2, "Show Time", eActions.ShowTime);
+            _ = new InterfacesMenuItem(firstLevelMenu2, "Show Date", eActions.ShowDate);
+
+            ((IMenuItemSelectedNotifier)mainMenu2).AttachObserver(this as IMenuItemSelectedObserver);
+            return mainMenu2;
+        }
+
+        private static bool createDelegatesMainMenu(out DelegatesMainMenu io_MainMenuDelegates)
         {
             bool initiationDelegates = false;
             io_MainMenuDelegates = new DelegatesMainMenu(k_TitleMainMenu);
@@ -112,12 +79,39 @@ namespace Program
 
                 initiationDelegates = true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
             }
 
             return initiationDelegates;
+        }
+
+        public static void CountSpaces()
+        {
+            Console.WriteLine("Please enter your sentence:");
+            string userSentence = Console.ReadLine();
+            int numOfSpaces = 0;
+
+            foreach(char c in userSentence)
+            {
+               if(c == k_SpacesChar)
+                {
+                    numOfSpaces++;
+                }
+            }
+
+            Console.WriteLine("There are {0} spaces in your sentence", numOfSpaces);
+        }
+
+        public static void ShowVersion()
+        {
+            Console.WriteLine("Version: 22.3.4.8650");
+        }
+
+        public static void ShowTime()
+        {
+            Console.WriteLine("{0}:{1}", DateTime.Now.Hour, DateTime.Now.Minute);
         }
 
         public static void MenuItem_Select_Version(object sender)
@@ -128,9 +122,7 @@ namespace Program
 
         public static void MenuItem_Select_CountSpaces(object sender)
         {
-            string userInputToCount = getLineForCountSpaces();
-            int numOfSpaces = countSpacaes(userInputToCount, k_SpacesChar);
-            Console.WriteLine(string.Format(k_StrFormtOfCountSpace, numOfSpaces, userInputToCount));
+            CountSpaces();
             waitForAnyInput();
         }
 
@@ -138,21 +130,6 @@ namespace Program
         {
             Console.WriteLine(k_WaitForAnyInpu);
             Console.Read();
-        }
-
-        private static int countSpacaes(string i_StrToCount, char i_CharToCount)
-        {
-            int cunt = 0;
-            char[] charsOfStr = i_StrToCount.ToCharArray();
-            foreach(char c in charsOfStr)
-            {
-                if(c == i_CharToCount)
-                {
-                    ++cunt;
-                }
-            }
-
-            return cunt;
         }
 
         private static string getLineForCountSpaces()
@@ -163,34 +140,13 @@ namespace Program
 
         public static void MenuItem_Select_ShowDate(object sender)
         {
-            showDateTime(eDateTime.ShowDate);
+            ShowDate();
             waitForAnyInput();
         }
 
         public static void MenuItem_Select_ShowTime(object sender)
         {
-            showDateTime(eDateTime.ShowTime);
             waitForAnyInput();
-        }
-
-        private static void showDateTime(eDateTime i_DateTime)
-        {
-            string strToPrint;
-            switch (i_DateTime)
-            {
-                case eDateTime.ShowTime:
-                    strToPrint = DateTime.UtcNow.ToString();
-                    break;
-                case eDateTime.ShowDate:
-                    strToPrint = DateTime.Today.ToString();
-                    break;
-                default:
-                    strToPrint = DateTime.Now.ToString();
-                    break;
-            }
-
-            Console.WriteLine(strToPrint);
-     /// eviatar-dev
         }
 
         public static void ShowDate()
@@ -198,7 +154,7 @@ namespace Program
             Console.WriteLine("{0}/{1}/{2}", DateTime.Now.Day, DateTime.Now.Month, DateTime.Now.Year);
         }
 
-        void IMenuItemSelectedObserver.MenuItem_Selected(MenuItem i_MenuItem)
+        void IMenuItemSelectedObserver.MenuItem_Selected(InterfacesMenuItem i_MenuItem)
         {
             switch (i_MenuItem.Action)
             {

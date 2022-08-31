@@ -37,6 +37,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="eActions.cs" />
     <Compile Include="eDateTime.cs" />
     <Compile Include="eVersionAndSpaces.cs" />
     <Compile Include="Program.cs" />
