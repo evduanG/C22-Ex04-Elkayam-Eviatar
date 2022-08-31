@@ -7,18 +7,20 @@ namespace Ex04.Menus.Interfaces
         private const string k_ParsingErrorMesage = "Invalid type of input, please try again!";
         private const string k_ValueOutOfBoundsMesage = "No such option available, please try again!";
         private const string k_LineSeparator = "================================";
+        private const string k_ReturnVal = "0";
+        private const string k_Exit = "Exit";
+        private const string k_Back = "Back";
 
         private const string k_MenuOptionStructure = "{0}. {1}";
-        private const string k_PromptStructure1 = "Please enter one of the options above ({0}-{1} or 0 to exit):";
-        private const string k_PromptStructure2 = "Please enter one of the options above ({0}-{1} or 0 to go back):";
+        private const string k_PromptStructure = "Please enter one of the options above ({0}-{1} or 0 to {2}):";
 
         /// <summary>
         /// Write a string on console
         /// </summary>
-        /// <param name="i_ItemToPrint"></param>
-        public static void Print(string i_ItemToPrint)
+        /// <param name="i_StrToPrint"></param>
+        internal static void Print(string i_StrToPrint)
         {
-            Console.WriteLine(i_ItemToPrint);
+            Console.WriteLine(i_StrToPrint);
         }
 
         /// <summary>
@@ -26,27 +28,27 @@ namespace Ex04.Menus.Interfaces
         /// </summary>
         /// <param name="i_Structure"></param>
         /// <param name="i_Args"></param>
-        public static void Print(string i_Structure, params string[] i_Args)
+        private static void print(string i_Structure, params string[] i_Args)
         {
             Print(string.Format(i_Structure, i_Args));
         }
 
         /// <summary>
-        /// Print the menu option with index at the beginning
+        /// print the menu option with index at the beginning
         /// </summary>
         /// <param name="i_Title"></param>
         /// <param name="i_Index"></param>
-        public static void ShowTitle(string i_Title, int i_Index)
+        internal static void ShowTitleAsItem(string i_Title, int i_Index)
         {
-            Print(k_MenuOptionStructure, i_Index.ToString(), i_Title);
+            print(k_MenuOptionStructure, i_Index.ToString(), i_Title);
             Print(k_LineSeparator);
         }
 
         /// <summary>
-        /// Print the main menu title
+        /// print the main menu title
         /// </summary>
         /// <param name="i_Title"></param>
-        public static void ShowTitle(string i_Title)
+        internal static void ShowTitle(string i_Title)
         {
             Print(i_Title);
             Print(k_LineSeparator);
@@ -64,49 +66,40 @@ namespace Ex04.Menus.Interfaces
         /// Go over the sub-menus list and print in format
         /// </summary>
         /// <param name="i_SubMenusToShow"></param>
-        public static void ShowSubMenus(MenuItem i_MenuItem)
+        internal static void ShowSubMenus(MenuItem i_MenuItem)
         {
             int index = 1;
             foreach(MenuItem menuItem in i_MenuItem.SubMenuItems)
             {
-                Print(k_MenuOptionStructure, index.ToString(), menuItem.Title);
+                print(k_MenuOptionStructure, index.ToString(), menuItem.Title);
                 index++;
             }
 
-            if(i_MenuItem is MainMenu)
-            {
-                Print(k_MenuOptionStructure, "0", "Exit");
-            }
-            else
-            {
-                Print(k_MenuOptionStructure, "0", "Back");
-            }
+            print(k_MenuOptionStructure, k_ReturnVal, getStrReturn(i_MenuItem));
 
             Print(k_LineSeparator);
         }
 
         /// <summary>
-        /// Print menu option prompt using the range of options available
+        /// print menu option prompt using the range of options available
         /// </summary>
         /// <param name="i_FirstMenuItemIndex"></param>
         /// <param name="i_SecondMEnuItemIndex"></param>
-        public static void ShowMenuPrompt(MenuItem i_menuItem, int i_FirstMenuItemIndex, int i_SecondMEnuItemIndex)
+        internal static void ShowMenuPrompt(MenuItem i_MenuItem, int i_FirstMenuItemIndex, int i_SecondMEnuItemIndex)
         {
-            if (i_menuItem is MainMenu)
-            {
-                Print(k_PromptStructure1, i_FirstMenuItemIndex.ToString(), i_SecondMEnuItemIndex.ToString());
-            }
-            else
-            {
-                Print(k_PromptStructure2, i_FirstMenuItemIndex.ToString(), i_SecondMEnuItemIndex.ToString());
-            }
+            print(k_PromptStructure, i_FirstMenuItemIndex.ToString(), i_SecondMEnuItemIndex.ToString(), getStrReturn(i_MenuItem));
+        }
+
+        private static string getStrReturn(MenuItem i_MenuItemTocheckIsMain)
+        {
+            return i_MenuItemTocheckIsMain is MainMenu ? k_Exit : k_Back;
         }
 
         /// <summary>
-        /// Print message according to the exception type given
+        /// print message according to the exception type given
         /// </summary>
         /// <param name="i_ErrorType"></param>
-        public static void ShowErrorMessage(eExceptionType i_ErrorType)
+        internal static void ShowErrorMessage(eExceptionType i_ErrorType)
         {
             switch (i_ErrorType)
             {

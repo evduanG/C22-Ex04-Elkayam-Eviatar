@@ -8,6 +8,7 @@ namespace Ex04.Menus.Interfaces
 {
     public class MenuItem : IMenuItemSelectedObserver, IMenuItemSelectedNotifier
     {
+        private const string k_ErrorInsertNull = "Error: are trying to insert a NULL menu item?";
         private readonly List<MenuItem> r_SubMenuItems;
         private readonly MenuItem r_ParentMenu;
         private readonly string r_Title;
@@ -19,6 +20,15 @@ namespace Ex04.Menus.Interfaces
         public string Title
         {
             get { return r_Title; }
+        }
+
+        /// <summary>
+        /// Check if this instance of MenuItem has sub-menus
+        /// </summary>
+        /// <returns>True if has sub-menus</returns>
+        internal bool HasSubMenus
+        {
+            get { return SubMenuItems.Count > 0; }
         }
 
         public List<MenuItem> SubMenuItems
@@ -76,36 +86,35 @@ namespace Ex04.Menus.Interfaces
         }
 
         // Methods as OBSERVER:
-        void IMenuItemSelectedObserver.MenuItem_Selected(MenuItem item)
+        void IMenuItemSelectedObserver.MenuItem_Selected(MenuItem i_ItemSelected)
         {
-            DoWhenSelected(item);
+            OnSelected(i_ItemSelected);
         }
 
         /// <summary>
-        /// show sub-menus if available, otherwise activate the item
+        /// show sub-menus if available, otherwise activate the i_ItemSelected
         /// </summary>
-        /// <param name="i_MenuItem"></param>
-        internal static void DoWhenSelected(MenuItem i_MenuItem)
+        /// <param name="i_SelectedItem"></param>
+        internal static void OnSelected(MenuItem i_SelectedItem)
         {
-            if (i_MenuItem.HasSubMenus())
+            if (i_SelectedItem.HasSubMenus)
             {
                 // show sub-menu
-                MenuItem parentMenuOfSelectedMenu = i_MenuItem.ParentMenu;
-                if(i_MenuItem is MainMenu)
+                if(i_SelectedItem is MainMenu)
                 {
-                    Screen.ShowTitle(i_MenuItem.Title);
+                    Screen.ShowTitle(i_SelectedItem.Title);
                 }
                 else
                 {
-                    Screen.ShowTitle(i_MenuItem.Title, parentMenuOfSelectedMenu.SubMenuItems.IndexOf(i_MenuItem) + 1);
+                    Screen.ShowTitleAsItem(i_SelectedItem.Title, i_SelectedItem.getIndxInParentMenu());
                 }
 
-                Screen.ShowSubMenus(i_MenuItem);
+                Screen.ShowSubMenus(i_SelectedItem);
             }
             else
             {
-                // activate action - send item up to observer
-                ((IMenuItemSelectedNotifier)i_MenuItem.ParentMenu).NotifiyObserver(i_MenuItem);
+                // activate action - send i_ItemSelected up to observer
+                ((IMenuItemSelectedNotifier)i_SelectedItem.ParentMenu).NotifiyObserver(i_SelectedItem);
                 UserInput.AwaitProgression();
             }
         }
@@ -113,30 +122,26 @@ namespace Ex04.Menus.Interfaces
         // Methods as MenuItem:
 
         /// <summary>
-        /// Add sub-menu item to the menu
+        /// Add sub-menu i_ItemSelected to the menu
         /// </summary>
-        /// <param name="i_MenuItem"></param>
+        /// <param name="i_MenuItemToAdd"></param>
         /// <exception cref="ArgumentException"></exception>
-        public void AddMenuItem(MenuItem i_MenuItem)
+        public void AddMenuItem(MenuItem i_MenuItemToAdd)
         {
-            if (i_MenuItem != null)
+            if (i_MenuItemToAdd != null)
             {
-                r_SubMenuItems.Add(i_MenuItem);
-                ((IMenuItemSelectedNotifier)i_MenuItem).AttachObserver(this as IMenuItemSelectedObserver);
+                r_SubMenuItems.Add(i_MenuItemToAdd);
+                ((IMenuItemSelectedNotifier)i_MenuItemToAdd).AttachObserver(this as IMenuItemSelectedObserver);
             }
             else
             {
-                throw new ArgumentException("Error: are trying to insert a NULL menu item?");
+                throw new ArgumentException(k_ErrorInsertNull);
             }
         }
 
-        /// <summary>
-        /// Check if this instance of MenuItem has sub-menus
-        /// </summary>
-        /// <returns>True if has sub-menus</returns>
-        internal bool HasSubMenus()
+        private int getIndxInParentMenu()
         {
-            return SubMenuItems.Count > 0;
+            return this.r_ParentMenu.SubMenuItems.IndexOf(this) + 1;
         }
     }
 }

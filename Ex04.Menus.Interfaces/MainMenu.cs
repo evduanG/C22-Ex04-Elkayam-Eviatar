@@ -9,6 +9,8 @@ namespace Ex04.Menus.Interfaces
     public class MainMenu : MenuItem, IMenuItemSelectedObserver
     {
         private const int k_ExitSymbol = 0;
+        private const int k_FirstMenuItemIndex = 1;
+        private const string k_UnknownExceptionFormat = "unknown exception: {0}";
 
         // Constructor
         public MainMenu(string i_Title)
@@ -17,9 +19,9 @@ namespace Ex04.Menus.Interfaces
         }
 
         // Methods as OBSERVER:
-        void IMenuItemSelectedObserver.MenuItem_Selected(MenuItem item)
+        void IMenuItemSelectedObserver.MenuItem_Selected(MenuItem i_SelectedItem)
         {
-            ((IMenuItemSelectedNotifier)this).NotifiyObserver(item);
+            ((IMenuItemSelectedNotifier)this).NotifiyObserver(i_SelectedItem);
         }
 
         // Methods as MainMenu
@@ -36,21 +38,21 @@ namespace Ex04.Menus.Interfaces
             {
                 try
                 {
-                    DoWhenSelected(currentMenuToShow);
+                    OnSelected(currentMenuToShow);
 
-                    if (currentMenuToShow.HasSubMenus())
+                    if (currentMenuToShow.HasSubMenus)
                     {
-                        Screen.ShowMenuPrompt(currentMenuToShow, 1, currentMenuToShow.SubMenuItems.Count);
+                        int numOfSubMenus = currentMenuToShow.SubMenuItems.Count;
+                        Screen.ShowMenuPrompt(currentMenuToShow, k_FirstMenuItemIndex, numOfSubMenus);
                         int itemSelectedIndex = UserInput.ReadSelection();
-                        Authenticate(itemSelectedIndex, 0, currentMenuToShow.SubMenuItems.Count);
+                        Authenticate(itemSelectedIndex, k_ExitSymbol, numOfSubMenus);
+                        bool isUserChooseToExit = itemSelectedIndex == k_ExitSymbol;
 
-                        if (itemSelectedIndex == k_ExitSymbol)
+                        if (isUserChooseToExit)
                         {
-                            if (currentMenuToShow is MainMenu)
-                            {
-                                choseQuit = true;
-                            }
-                            else
+                            choseQuit = currentMenuToShow is MainMenu;
+
+                            if (!choseQuit)
                             {
                                 // go back a menu
                                 currentMenuToShow = currentMenuToShow.ParentMenu;
@@ -59,8 +61,7 @@ namespace Ex04.Menus.Interfaces
                         else
                         {
                             // go forward
-                            MenuItem chosenItem = currentMenuToShow.SubMenuItems[itemSelectedIndex - 1];
-                            currentMenuToShow = chosenItem;
+                            currentMenuToShow = currentMenuToShow.SubMenuItems[itemSelectedIndex - 1];
                         }
                     }
                     else
@@ -81,7 +82,7 @@ namespace Ex04.Menus.Interfaces
                 }
                 catch (Exception e)
                 {
-                    Screen.Print("unknown exception: " + e.Message);
+                    Screen.Print(string.Format(k_UnknownExceptionFormat, e.Message));
                     UserInput.AwaitProgression();
                 }
 
