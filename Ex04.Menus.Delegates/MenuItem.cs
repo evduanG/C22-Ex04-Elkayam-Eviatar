@@ -50,6 +50,7 @@ namespace Ex04.Menus.Delegates
         {
             if(SelectItemOccured != null)
             {
+                Screen.ClearScreen();
                 SelectItemOccured(i_Item);
             }
         }

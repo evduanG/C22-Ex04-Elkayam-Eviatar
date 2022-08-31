@@ -36,7 +36,7 @@ namespace Ex04.Menus.Delegates
         /// <summary>
         /// Clears the console
         /// </summary>
-        private static void clearScreen()
+        public static void ClearScreen()
         {
             Console.Clear();
         }
@@ -53,7 +53,7 @@ namespace Ex04.Menus.Delegates
         /// <param name="i_SecondMEnuItemIndex"></param>
         public static void ShowMenuPrompt(MainMenu i_MainMenuToPrint)
         {
-            clearScreen();
+            ClearScreen();
             Print(i_MainMenuToPrint.ToString());
         }
 
