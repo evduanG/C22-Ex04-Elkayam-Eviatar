@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +8,7 @@ using DelegatesMainMenu = Ex04.Menus.Delegates.MainMenu;
 
 namespace Ex04.Menus.Test
 {
+
     internal class Program
     {
         internal class InterfaceMenuSystem : IMenuItemSelectedObserver
