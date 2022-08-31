@@ -1,12 +1,14 @@
-﻿using Ex04.Menus.Delegates;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Ex04.Menus.Interfaces;
 using DelegatesMainMenu = Ex04.Menus.Delegates.MainMenu;
+using InterfacesMainMenu = Ex04.Menus.Interfaces.MainMenu;
+using InterfacesMenuItem = Ex04.Menus.Interfaces.MenuItem;
 
-namespace Program
+namespace Ex04.Menus.Test
 {
     internal class Program : IMenuItemSelectedObserver
     {
@@ -21,19 +23,18 @@ namespace Program
         private const string k_StrFormtOfCountSpace = @"There is a {0} Space in the line :
 {1}";
 
-        private MainMenu m_MainMenu1;
-        private MainMenu m_MainMenu2;
+        private InterfacesMainMenu m_MainMenu;
 
         public Program()
         {
-            m_MainMenu1 = createIterfaceMenu();
+            m_MainMenu = createIterfaceMenu();
         }
 
         public static void Main()
         {
             Program testProgram = new Program();
 
-            testProgram.m_MainMenu1.Show();
+            testProgram.m_MainMenu.Show();
 
             bool isInitSecsucceeded = createDelegatesMainMenu(out DelegatesMainMenu io_MainMenuDelegates);
             if (isInitSecsucceeded)
@@ -45,12 +46,12 @@ namespace Program
         private MainMenu createIterfaceMenu()
         {
             MainMenu mainMenu2 = new MainMenu("Interface Main Menu");
-            MenuItem firstLevelMenu1 = new MenuItem(mainMenu2, "Version and Spaces");
-            MenuItem firstLevelMenu2 = new MenuItem(mainMenu2, "Show Date/Time");
-            _ = new MenuItem(firstLevelMenu1, "Count Spaces", eActions.CountSpaces);
-            _ = new MenuItem(firstLevelMenu1, "Show Version", eActions.ShowVersion);
-            _ = new MenuItem(firstLevelMenu2, "Show Time", eActions.ShowTime);
-            _ = new MenuItem(firstLevelMenu2, "Show Date", eActions.ShowDate);
+            InterfacesMenuItem firstLevelMenu1 = new InterfacesMenuItem(mainMenu2, "Version and Spaces");
+            InterfacesMenuItem firstLevelMenu2 = new InterfacesMenuItem(mainMenu2, "Show Date/Time");
+            _ = new InterfacesMenuItem(firstLevelMenu1, "Count Spaces", eActions.CountSpaces);
+            _ = new InterfacesMenuItem(firstLevelMenu1, "Show Version", eActions.ShowVersion);
+            _ = new InterfacesMenuItem(firstLevelMenu2, "Show Time", eActions.ShowTime);
+            _ = new InterfacesMenuItem(firstLevelMenu2, "Show Date", eActions.ShowDate);
 
             ((IMenuItemSelectedNotifier)mainMenu2).AttachObserver(this as IMenuItemSelectedObserver);
             return mainMenu2;
@@ -148,13 +149,12 @@ namespace Program
             waitForAnyInput();
         }
 
-
         public static void ShowDate()
         {
             Console.WriteLine("{0}/{1}/{2}", DateTime.Now.Day, DateTime.Now.Month, DateTime.Now.Year);
         }
 
-        void IMenuItemSelectedObserver.MenuItem_Selected(MenuItem i_MenuItem)
+        void IMenuItemSelectedObserver.MenuItem_Selected(InterfacesMenuItem i_MenuItem)
         {
             switch (i_MenuItem.Action)
             {
