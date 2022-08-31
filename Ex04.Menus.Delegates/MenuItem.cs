@@ -46,12 +46,12 @@ namespace Ex04.Menus.Delegates
             m_ParentMenu = i_ParentMenu;
         }
 
-        protected virtual void OnSelectItem(MenuItem i_Item)
+        protected virtual void OnSelectItem(MenuItem i_SelectItem)
         {
             if(SelectItemOccured != null)
             {
                 Screen.ClearScreen();
-                SelectItemOccured(i_Item);
+                SelectItemOccured(i_SelectItem);
             }
         }
 
