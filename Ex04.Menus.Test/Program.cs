@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -69,8 +69,8 @@ namespace Ex04.Menus.Test
         private const string k_TitleSubMenuDateTime = "Show Date/Time";
         private const string k_WaitForAnyInput = "Press enter to continue";
         private const string k_Version = "Version: 22.3.4.8650";
-        private const string k_AskForLineToCountSpaces = @"Please enter the desired line where you want to count the Spaces";
-        private const string k_StrFormtOfCountSpace = @"There are {0} Space in the line:
+        private const string k_AskForLineToCountSpaces = @"Please enter the desired line in which you want to count the spaces";
+        private const string k_StrFormtOfCountSpace = @"There are {0} spaces in the line:
 {1}";
 
         public const string k_TimeFormat = "The time is: {0}:{1}";
