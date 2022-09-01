@@ -49,10 +49,12 @@ namespace Ex04.Menus.Test
 
             private MainMenu createIterfaceMenu()
             {
+                // add menus
                 MainMenu mainMenu = new MainMenu(k_TitleMainMenuInterface);
                 MenuItem subMenu1 = addSubMenu(mainMenu, k_TitleSubMenuVersionAndSpaces);
                 MenuItem subMenu2 = addSubMenu(mainMenu, k_TitleSubMenuDateTime);
 
+                // add menu items
                 addMenuItem(subMenu1, k_TitleCountSpaces, eVersionAndSpaces.CountSpaces);
                 addMenuItem(subMenu1, k_TitleShowVersion, eVersionAndSpaces.ShowVersion);
                 addMenuItem(subMenu2, k_TitleShowTime, eDateTime.ShowTime);

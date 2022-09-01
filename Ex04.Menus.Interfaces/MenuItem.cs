@@ -113,7 +113,7 @@ namespace Ex04.Menus.Interfaces
             }
             else
             {
-                // activate action - send i_ItemSelected up to observer
+                // activate action
                 ((IMenuItemSelectedNotifier)i_SelectedItem.ParentMenu).NotifiyObserver(i_SelectedItem);
                 UserInput.AwaitProgression();
             }
