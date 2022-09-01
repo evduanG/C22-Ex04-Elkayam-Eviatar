@@ -20,9 +20,9 @@ namespace Ex04.Menus.Delegates
         /// <exception cref="ArgumentException"></exception>
         internal static byte ReadSelection()
         {
-            if (byte.TryParse(Read(), out byte selection))
+            if (byte.TryParse(Read(), out byte o_Selection))
             {
-                return selection;
+                return o_Selection;
             }
             else
             {

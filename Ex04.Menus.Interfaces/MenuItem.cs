@@ -13,7 +13,6 @@ namespace Ex04.Menus.Interfaces
         private readonly MenuItem r_ParentMenu;
         private readonly string r_Title;
         private readonly Enum r_Action;
-
         protected readonly List<IMenuItemSelectedObserver> r_MenuItemSelectedObservers = new List<IMenuItemSelectedObserver>();
 
         // Properties:
@@ -51,6 +50,7 @@ namespace Ex04.Menus.Interfaces
         {
             r_Title = i_Title;
             r_ParentMenu = i_ParentMenu;
+
             if (i_ParentMenu != null)
             {
                 i_ParentMenu.AddMenuItem(this);
@@ -113,7 +113,7 @@ namespace Ex04.Menus.Interfaces
             }
             else
             {
-                // activate action - send i_ItemSelected up to observer
+                // activate action
                 ((IMenuItemSelectedNotifier)i_SelectedItem.ParentMenu).NotifiyObserver(i_SelectedItem);
                 UserInput.AwaitProgression();
             }

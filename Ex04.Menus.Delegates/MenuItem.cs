@@ -11,10 +11,9 @@ namespace Ex04.Menus.Delegates
     public class MenuItem
     {
         private MainMenu m_ParentMenu;
+        private string m_Title;
 
         public event SelectItemHandler SelectItemOccured;
-
-        private string m_Title;
 
         // Properties:
         public string Title

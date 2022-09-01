@@ -49,10 +49,12 @@ namespace Ex04.Menus.Test
 
             private MainMenu createIterfaceMenu()
             {
+                // add menus
                 MainMenu mainMenu = new MainMenu(k_TitleMainMenuInterface);
                 MenuItem subMenu1 = addSubMenu(mainMenu, k_TitleSubMenuVersionAndSpaces);
                 MenuItem subMenu2 = addSubMenu(mainMenu, k_TitleSubMenuDateTime);
 
+                // add menu items
                 addMenuItem(subMenu1, k_TitleCountSpaces, eVersionAndSpaces.CountSpaces);
                 addMenuItem(subMenu1, k_TitleShowVersion, eVersionAndSpaces.ShowVersion);
                 addMenuItem(subMenu2, k_TitleShowTime, eDateTime.ShowTime);
@@ -62,14 +64,14 @@ namespace Ex04.Menus.Test
                 return mainMenu;
             }
 
-            private MenuItem addSubMenu(MainMenu i_MainMenu, string i_MenuTitle)
+            private MenuItem addSubMenu(MainMenu i_ParentMainMenu, string i_SubMenuTitle)
             {
-                return new MenuItem(i_MainMenu, i_MenuTitle);
+                return new MenuItem(i_ParentMainMenu, i_SubMenuTitle);
             }
 
-            private void addMenuItem(MenuItem subMenu, string i_Title, Enum i_functionName)
+            private void addMenuItem(MenuItem i_ParentMenu, string i_Title, Enum i_functionName)
             {
-                new MenuItem(subMenu, i_Title, i_functionName);
+                new MenuItem(i_ParentMenu, i_Title, i_functionName);
             }
         }
 
@@ -93,7 +95,6 @@ namespace Ex04.Menus.Test
             testSystem.Show();
 
             bool isInitSecsucceeded = createDelegatesMainMenu(out DelegatesMainMenu o_MainMenuDelegates);
-
             if (isInitSecsucceeded)
             {
                 o_MainMenuDelegates.Show();
@@ -119,7 +120,6 @@ namespace Ex04.Menus.Test
                 subMenueDateTime[eDateTime.ShowTime].SelectItemOccured += MenuItemSelect_ShowTime;
                 subMenueDateTime[eDateTime.ShowDate].SelectItemOccured += MenuItemSelect_ShowDate;
                 o_MainMenuDelegates.AddMenuItem(subMenueDateTime);
-
                 initiationDelegates = true;
             }
             catch (Exception ex)
