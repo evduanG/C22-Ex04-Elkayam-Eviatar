@@ -75,8 +75,7 @@ namespace Ex04.Menus.Interfaces
                 index++;
             }
 
-            print(k_MenuOptionStructure, k_ReturnVal, getStrReturn(i_MenuItem));
-
+            print(k_MenuOptionStructure, k_ReturnVal, getExitOrBack(i_MenuItem));
             Print(k_LineSeparator);
         }
 
@@ -84,15 +83,15 @@ namespace Ex04.Menus.Interfaces
         /// print menu option prompt using the range of options available
         /// </summary>
         /// <param name="i_FirstMenuItemIndex"></param>
-        /// <param name="i_SecondMEnuItemIndex"></param>
-        internal static void ShowMenuPrompt(MenuItem i_MenuItem, int i_FirstMenuItemIndex, int i_SecondMEnuItemIndex)
+        /// <param name="i_SecondMenuItemIndex"></param>
+        internal static void ShowMenuPrompt(MenuItem i_MenuItem, int i_FirstMenuItemIndex, int i_SecondMenuItemIndex)
         {
-            print(k_PromptStructure, i_FirstMenuItemIndex.ToString(), i_SecondMEnuItemIndex.ToString(), getStrReturn(i_MenuItem));
+            print(k_PromptStructure, i_FirstMenuItemIndex.ToString(), i_SecondMenuItemIndex.ToString(), getExitOrBack(i_MenuItem));
         }
 
-        private static string getStrReturn(MenuItem i_MenuItemTocheckIsMain)
+        private static string getExitOrBack(MenuItem i_MenuItemToCheckIsMain)
         {
-            return i_MenuItemTocheckIsMain is MainMenu ? k_Exit : k_Back;
+            return i_MenuItemToCheckIsMain is MainMenu ? k_Exit : k_Back;
         }
 
         /// <summary>
