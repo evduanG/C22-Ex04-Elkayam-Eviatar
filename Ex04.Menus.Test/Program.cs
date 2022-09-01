@@ -28,21 +28,21 @@ namespace Ex04.Menus.Test
                 r_MainMenu.Show();
             }
 
-            void IMenuItemSelectedObserver.MenuItem_Selected(MenuItem i_MenuItem)
+            void IMenuItemSelectedObserver.MenuItem_Selected(MenuItem i_SelectedMenuItem)
             {
-                switch (i_MenuItem.Action)
+                switch (i_SelectedMenuItem.Action)
                 {
                     case eVersionAndSpaces.CountSpaces:
-                        CountSpaces();
+                        countSpaces();
                         break;
                     case eVersionAndSpaces.ShowVersion:
-                        ShowVersion();
+                        showVersion();
                         break;
                     case eDateTime.ShowTime:
-                        ShowTime();
+                        showTime();
                         break;
                     case eDateTime.ShowDate:
-                        ShowDate();
+                        showDate();
                         break;
                 }
             }
@@ -93,6 +93,7 @@ namespace Ex04.Menus.Test
             testSystem.Show();
 
             bool isInitSecsucceeded = createDelegatesMainMenu(out DelegatesMainMenu o_MainMenuDelegates);
+
             if (isInitSecsucceeded)
             {
                 o_MainMenuDelegates.Show();
@@ -108,15 +109,15 @@ namespace Ex04.Menus.Test
                 // add Version And Spaces
                 DelegatesMainMenu subMenueVersionAndSpaces = new DelegatesMainMenu(k_TitleSubMenuVersionAndSpaces);
                 subMenueVersionAndSpaces.CreatMenuItemFromEnum(typeof(eVersionAndSpaces));
-                subMenueVersionAndSpaces[eVersionAndSpaces.ShowVersion].SelectItemOccured += MenuItem_Select_Version;
-                subMenueVersionAndSpaces[eVersionAndSpaces.CountSpaces].SelectItemOccured += MenuItem_Select_CountSpaces;
+                subMenueVersionAndSpaces[eVersionAndSpaces.ShowVersion].SelectItemOccured += MenuItemSelect_Version;
+                subMenueVersionAndSpaces[eVersionAndSpaces.CountSpaces].SelectItemOccured += MenuItemSelect_CountSpaces;
                 o_MainMenuDelegates.AddMenuItem(subMenueVersionAndSpaces);
 
                 // add Version And Spaces
                 DelegatesMainMenu subMenueDateTime = new DelegatesMainMenu(k_TitleSubMenuDateTime);
                 subMenueDateTime.CreatMenuItemFromEnum(typeof(eDateTime));
-                subMenueDateTime[eDateTime.ShowTime].SelectItemOccured += MenuItem_Select_ShowTime;
-                subMenueDateTime[eDateTime.ShowDate].SelectItemOccured += MenuItem_Select_ShowDate;
+                subMenueDateTime[eDateTime.ShowTime].SelectItemOccured += MenuItemSelect_ShowTime;
+                subMenueDateTime[eDateTime.ShowDate].SelectItemOccured += MenuItemSelect_ShowDate;
                 o_MainMenuDelegates.AddMenuItem(subMenueDateTime);
 
                 initiationDelegates = true;
@@ -129,7 +130,7 @@ namespace Ex04.Menus.Test
             return initiationDelegates;
         }
 
-        public static void CountSpaces()
+        private static void countSpaces()
         {
             Console.WriteLine(k_AskForLineToCountSpaces);
             string userSentence = Console.ReadLine();
@@ -146,42 +147,42 @@ namespace Ex04.Menus.Test
             Console.WriteLine(k_StrFormtOfCountSpace, numOfSpaces, userSentence);
         }
 
-        public static void MenuItem_Select_CountSpaces(object sender)
+        public static void MenuItemSelect_CountSpaces(object i_Sender)
         {
-            CountSpaces();
+            countSpaces();
             waitForAnyInput();
         }
 
-        public static void ShowVersion()
+        private static void showVersion()
         {
             Console.WriteLine(k_Version);
         }
 
-        public static void MenuItem_Select_Version(object sender)
+        public static void MenuItemSelect_Version(object i_Sender)
         {
-            ShowVersion();
+            showVersion();
             waitForAnyInput();
         }
 
-        public static void ShowTime()
+        private static void showTime()
         {
             Console.WriteLine(k_TimeFormat, DateTime.Now.Hour, DateTime.Now.Minute);
         }
 
-        public static void MenuItem_Select_ShowTime(object sender)
+        public static void MenuItemSelect_ShowTime(object i_Sender)
         {
-            ShowTime();
+            showTime();
             waitForAnyInput();
         }
 
-        public static void ShowDate()
+        private static void showDate()
         {
             Console.WriteLine(k_DateFormat, DateTime.Now.Day, DateTime.Now.Month, DateTime.Now.Year);
         }
 
-        public static void MenuItem_Select_ShowDate(object sender)
+        public static void MenuItemSelect_ShowDate(object i_Sender)
         {
-            ShowDate();
+            showDate();
             waitForAnyInput();
         }
 

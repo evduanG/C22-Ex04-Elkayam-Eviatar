@@ -20,9 +20,9 @@ namespace Ex04.Menus.Interfaces
         /// <exception cref="ArgumentException"></exception>
         public static int ReadSelection()
         {
-            if (int.TryParse(Read(), out int selection))
+            if (int.TryParse(Read(), out int o_Selection))
             {
-                return selection;
+                return o_Selection;
             }
             else
             {
