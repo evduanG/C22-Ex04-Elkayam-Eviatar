@@ -92,6 +92,7 @@ namespace Ex04.Menus.Delegates
             {
                 string strInx = Enum.Format(i_EnumInex.GetType(), i_EnumInex, "x");
                 byte.TryParse(strInx, out byte o_Indx);
+
                 return this[o_Indx];
             }
 
@@ -122,6 +123,7 @@ namespace Ex04.Menus.Delegates
             byte minOption = byte.MaxValue;
             byte maxOption = byte.MinValue;
             StringBuilder sb = new StringBuilder();
+
             sb.AppendLine(getTitleToString());
             sb.AppendLine(k_LineSeparatorFormt);
 

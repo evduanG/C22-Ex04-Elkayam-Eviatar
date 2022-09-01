@@ -69,6 +69,7 @@ namespace Ex04.Menus.Interfaces
         internal static void ShowSubMenus(MenuItem i_MenuItem)
         {
             int index = 1;
+
             foreach(MenuItem menuItem in i_MenuItem.SubMenuItems)
             {
                 print(k_MenuOptionStructure, index.ToString(), menuItem.Title);

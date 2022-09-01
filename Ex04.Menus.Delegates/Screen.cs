@@ -32,9 +32,9 @@ namespace Ex04.Menus.Delegates
             Print(i_MainMenuToPrint.ToString());
         }
 
-        internal static void ShowEror(Exception e)
+        internal static void ShowEror(Exception i_Exception)
         {
-            Print(e.Message);
+            Print(i_Exception.Message);
         }
     }
 }

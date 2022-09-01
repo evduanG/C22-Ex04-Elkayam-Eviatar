@@ -10,7 +10,7 @@ namespace Ex04.Menus.Interfaces
     {
         private const int k_ExitSymbol = 0;
         private const int k_FirstMenuItemIndex = 1;
-        private const string k_UnknownExceptionFormat = "unknown exception: {0}";
+        private const string k_UnknownExceptionFormat = "Unknown exception: {0}";
 
         // Constructor
         public MainMenu(string i_Title)
@@ -46,9 +46,9 @@ namespace Ex04.Menus.Interfaces
                         Screen.ShowMenuPrompt(currentMenuToShow, k_FirstMenuItemIndex, numOfSubMenus);
                         int itemSelectedIndex = UserInput.ReadSelection();
                         Authenticate(itemSelectedIndex, k_ExitSymbol, numOfSubMenus);
-                        bool isUserChooseToExit = itemSelectedIndex == k_ExitSymbol;
+                        bool isUserChoseToExit = itemSelectedIndex == k_ExitSymbol;
 
-                        if (isUserChooseToExit)
+                        if (isUserChoseToExit)
                         {
                             choseQuit = currentMenuToShow is MainMenu;
 
