@@ -50,16 +50,26 @@ namespace Ex04.Menus.Test
             private MainMenu createIterfaceMenu()
             {
                 MainMenu mainMenu = new MainMenu(k_TitleMainMenuInterface);
-                MenuItem subMenuVersionAndSpaces = new MenuItem(mainMenu, k_TitleSubMenuVersionAndSpaces);
-                MenuItem subMenuDateTime = new MenuItem(mainMenu, k_TitleSubMenuDateTime);
-                new MenuItem(subMenuVersionAndSpaces, k_TitleCountSpaces, eVersionAndSpaces.CountSpaces);
-                new MenuItem(subMenuVersionAndSpaces, k_TitleShowVersion, eVersionAndSpaces.ShowVersion);
-                new MenuItem(subMenuDateTime, k_TitleShowTime, eDateTime.ShowTime);
-                new MenuItem(subMenuDateTime, k_TitleShowDate, eDateTime.ShowDate);
+                MenuItem subMenu1 = addSubMenu(mainMenu, k_TitleSubMenuVersionAndSpaces);
+                MenuItem subMenu2 = addSubMenu(mainMenu, k_TitleSubMenuDateTime);
+
+                addMenuItem(subMenu1, k_TitleCountSpaces, eVersionAndSpaces.CountSpaces);
+                addMenuItem(subMenu1, k_TitleShowVersion, eVersionAndSpaces.ShowVersion);
+                addMenuItem(subMenu2, k_TitleShowTime, eDateTime.ShowTime);
+                addMenuItem(subMenu2, k_TitleShowDate, eDateTime.ShowDate);
 
                 ((IMenuItemSelectedNotifier)mainMenu).AttachObserver(this as IMenuItemSelectedObserver);
-
                 return mainMenu;
+            }
+
+            private MenuItem addSubMenu(MainMenu i_MainMenu, string i_MenuTitle)
+            {
+                return new MenuItem(i_MainMenu, i_MenuTitle);
+            }
+
+            private void addMenuItem(MenuItem subMenu, string i_Title, Enum i_functionName)
+            {
+                new MenuItem(subMenu, i_Title, i_functionName);
             }
         }
 
